@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Yes We Can! — Get in the Jar</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Barlow:wght@400;500&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:#FAF6EF;color:#201810;font-family:'Barlow',sans-serif;min-height:100vh;padding-bottom:48px;}
+
+.hdr{background:#2A4A2E;padding:22px 20px 18px;}
+.hdr-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;}
+.hdr h1{font-family:'Playfair Display',serif;font-size:1.5rem;color:#fff;line-height:1.25;margin:0;}
+.hdr h1 em{font-style:italic;color:#9FCC88;}
+.hdr-jar{font-size:28px;flex-shrink:0;margin-top:2px;}
+.hdr p{font-size:.8rem;color:#9FCC88;line-height:1.5;}
+
+.progress-bar{height:3px;background:rgba(255,255,255,.15);}
+.progress-fill{height:100%;background:#C07B1A;transition:width .3s ease;}
+
+.step{display:none;}
+.step.active{display:block;}
+
+.step-body{padding:20px 20px 4px;}
+.step-q{font-size:1rem;font-weight:500;color:#201810;margin-bottom:5px;line-height:1.4;}
+.step-hint{font-size:.8rem;color:#6B5C48;margin-bottom:16px;line-height:1.55;}
+
+/* Tiles */
+.tile-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-bottom:8px;}
+.tile{border:1px solid #D8CCBA;border-radius:10px;background:#F0E8D8;padding:14px 10px 11px;cursor:pointer;text-align:center;user-select:none;transition:all .12s;}
+.tile.sel,.tile:active{border-color:#3B6D11;background:#EAF3DE;}
+.tile-icon{font-size:.85rem;font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.05em;color:#6B5C48;margin-bottom:4px;}
+.tile-icon i{font-size:22px;display:block;margin-bottom:4px;}
+.tile.sel .tile-icon i,.tile.sel .tile-lbl{color:#27500A;}
+.tile-lbl{font-size:.78rem;font-weight:500;color:#6B5C48;line-height:1.3;}
+
+/* Pills */
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+.pill{font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:600;padding:7px 14px;border-radius:20px;border:1px solid #D8CCBA;background:#F0E8D8;color:#6B5C48;cursor:pointer;transition:all .12s;line-height:1;}
+.pill.sel       {background:#FAEEDA;border-color:#BA7517;color:#412402;}
+.pill.sel-green {background:#EAF3DE;border-color:#3B6D11;color:#27500A;}
+.pill.sel-purple{background:#EEEDFE;border-color:#534AB7;color:#26215C;}
+.pill.sel-pink  {background:#FBEAF0;border-color:#D4537E;color:#4B1528;}
+.pill.sel-teal  {background:#E1F5EE;border-color:#3B6D11;color:#085041;}
+
+/* Scale */
+.scale-btns{display:flex;justify-content:center;gap:10px;margin-bottom:10px;}
+.scale-btn{width:50px;height:50px;border:1px solid #D8CCBA;border-radius:10px;background:#F0E8D8;font-size:1rem;font-weight:500;cursor:pointer;color:#6B5C48;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;transition:all .12s;}
+.scale-btn.lit{background:#EAF3DE;border-color:#3B6D11;color:#27500A;font-weight:700;}
+.scale-ends{display:flex;justify-content:space-between;font-size:.72rem;color:#6B5C48;padding:0 4px;}
+.scale-label{text-align:center;font-size:.78rem;color:#6B5C48;min-height:20px;margin-top:10px;font-style:italic;}
+
+/* Inputs */
+.field-label{font-size:.82rem;font-weight:500;color:#201810;display:block;margin-bottom:8px;}
+.field-sub{font-weight:400;color:#6B5C48;}
+input[type=text],input[type=email],textarea{width:100%;padding:12px 14px;border:1px solid #D8CCBA;border-radius:8px;font-family:'Barlow',sans-serif;font-size:.9rem;color:#201810;background:#F8F4EE;line-height:1.5;-webkit-appearance:none;margin-bottom:10px;}
+input:focus,textarea:focus{outline:none;border-color:#3D6B42;}
+textarea{min-height:80px;resize:vertical;}
+
+.new-badge{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:.7rem;font-weight:700;letter-spacing:.06em;padding:3px 10px;border-radius:20px;background:#FAEEDA;color:#412402;border:1px solid #BA7517;vertical-align:middle;margin-left:8px;}
+
+.section-divider{height:1px;background:#E8DECE;margin:16px 0 12px;}
+
+/* Footer nav */
+.step-footer{padding:14px 20px 20px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E8DECE;background:#FAF6EF;}
+.step-counter{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;letter-spacing:.06em;color:#6B5C48;text-transform:uppercase;}
+.nav-btn{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:11px 22px;border-radius:8px;cursor:pointer;-webkit-appearance:none;transition:all .12s;}
+.btn-back{background:transparent;border:1px solid #D8CCBA;color:#6B5C48;}
+.btn-next{background:#2A4A2E;border:none;color:#fff;}
+.btn-submit{background:#C07B1A;border:none;color:#fff;padding:12px 28px;}
+
+/* Error */
+.err{font-size:.78rem;color:#A32D2D;display:none;margin:-6px 0 8px;}
+
+/* Thank you */
+#thankYou{display:none;padding:40px 24px;text-align:center;}
+.ty-jar{font-size:48px;margin-bottom:16px;}
+.ty-h{font-family:'Playfair Display',serif;font-size:1.5rem;color:#2A4A2E;margin-bottom:12px;}
+.ty-p{font-size:.88rem;color:#6B5C48;line-height:1.7;margin-bottom:8px;}
+.ty-wishlist{font-style:italic;color:#C07B1A;font-size:.85rem;margin-top:4px;display:none;}
+.ty-brand{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#6B5C48;margin-top:20px;padding-top:16px;border-top:1px solid #D8CCBA;}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-top">
+    <h1>Get in the Jar.<br><em>Join the Yes We Can! list.</em></h1>
+    <div class="hdr-jar">🫙</div>
+  </div>
+  <p>First access to new products &middot; market dates &middot; the occasional behind-the-scenes pickle situation</p>
+  <p style="margin-top:8px;"><a href="https://www.yeswecanpickle.com" style="color:rgba(255,255,255,.45);font-size:.72rem;text-decoration:none;letter-spacing:.04em;">yeswecanpickle.com ↗</a></p>
+</header>
+
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+<form id="joinForm" action="https://formspree.io/f/mnjryqjv" method="POST">
+
+  <input type="hidden" name="_next" value="https://www.yeswecanpickle.com">
+  <input type="hidden" name="_subject" value="Yes We Can! — New mailing list signup">
+  <input type="hidden" name="q1_brings_you_here" id="q1_val" value="">
+  <input type="hidden" name="q2_products_you_have" id="q2_val" value="">
+  <input type="hidden" name="q3_wishlist" id="q3_val" value="">
+  <input type="hidden" name="q3_wild_idea" id="q3_wild_val" value="">
+  <input type="hidden" name="q4_how_you_hear" id="q4_val" value="">
+  <input type="hidden" name="q4_email_frequency" id="q4b_val" value="">
+  <input type="hidden" name="q5_recommend_score" id="q5_val" value="">
+  <input type="hidden" name="q5_notes" id="q5_free_val" value="">
+
+  <!-- STEP 1 -->
+  <div id="step1" class="step active">
+    <div class="step-body">
+      <p class="step-q">What brings you to the Yes We Can! table?</p>
+      <p class="step-hint">Pick everything that fits. We won't judge — we'd choose all of these too.</p>
+      <div class="tile-grid">
+        <div class="tile" onclick="toggleTile(this,'q1')">
+          <div class="tile-icon"><i>🧀</i></div>
+          <div class="tile-lbl">Cheese board obsessed</div>
+        </div>
+        <div class="tile" onclick="toggleTile(this,'q1')">
+          <div class="tile-icon"><i>🌶️</i></div>
+          <div class="tile-lbl">I like it spicy</div>
+        </div>
+        <div class="tile" onclick="toggleTile(this,'q1')">
+          <div class="tile-icon"><i>🔥</i></div>
+          <div class="tile-lbl">Backyard BBQ person</div>
+        </div>
+        <div class="tile" onclick="toggleTile(this,'q1')">
+          <div class="tile-icon"><i>🎁</i></div>
+          <div class="tile-lbl">I buy gifts I'd keep</div>
+        </div>
+        <div class="tile" onclick="toggleTile(this,'q1')">
+          <div class="tile-icon"><i>🍸</i></div>
+          <div class="tile-lbl">Cocktail experimenter</div>
+        </div>
+        <div class="tile" onclick="toggleTile(this,'q1')">
+          <div class="tile-icon"><i>🥒</i></div>
+          <div class="tile-lbl">Pickle purist</div>
+        </div>
+        <div class="tile" onclick="toggleTile(this,'q1')">
+          <div class="tile-icon"><i>🌿</i></div>
+          <div class="tile-lbl">I love local NH food</div>
+        </div>
+        <div class="tile" onclick="toggleTile(this,'q1')">
+          <div class="tile-icon"><i>👨‍🍳</i></div>
+          <div class="tile-lbl">Home cook / foodie</div>
+        </div>
+      </div>
+    </div>
+    <div class="step-footer">
+      <span class="step-counter">Step 1 of 6</span>
+      <button type="button" class="nav-btn btn-next" onclick="goStep(2)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div id="step2" class="step">
+    <div class="step-body">
+      <p class="step-q">What's already in your fridge from our lineup?</p>
+      <p class="step-hint">Or what caught your eye today. All answers are correct here.</p>
+      <div class="pill-row" id="q2-pills">
+        <div class="pill" onclick="togglePill(this,'q2','sel-teal')">Garlic dill pickle</div>
+        <div class="pill" onclick="togglePill(this,'q2','sel-teal')">Bread &amp; butter pickles</div>
+        <div class="pill" onclick="togglePill(this,'q2','sel-pink')">Hot pepper jelly</div>
+        <div class="pill" onclick="togglePill(this,'q2','sel')">Dr. Pepper BBQ sauce</div>
+        <div class="pill" onclick="togglePill(this,'q2','sel-green')">Spiced whole grain mustard</div>
+        <div class="pill" onclick="togglePill(this,'q2','sel-teal')">Pickled hot honey carrots</div>
+        <div class="pill" onclick="togglePill(this,'q2','sel-purple')">Friday Fish Blend</div>
+        <div class="pill" onclick="togglePill(this,'q2','sel-purple')">Chuckwagon Brisket</div>
+        <div class="pill" onclick="togglePill(this,'q2','sel-purple')">Hunter's Cabin Duck</div>
+        <div class="pill" onclick="togglePill(this,'q2','sel-purple')">Doc's Backyard BBQ</div>
+        <div class="pill" onclick="togglePill(this,'q2','sel-purple')">Martinique</div>
+        <div class="pill" onclick="togglePill(this,'q2','sel-purple')">Cleo's Kiss</div>
+        <div class="pill" onclick="togglePill(this,'q2','sel')">None yet — just discovered Yes We Can!</div>
+      </div>
+    </div>
+    <div class="step-footer">
+      <button type="button" class="nav-btn btn-back" onclick="goStep(1)">← Back</button>
+      <span class="step-counter">Step 2 of 6</span>
+      <button type="button" class="nav-btn btn-next" onclick="goStep(3)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div id="step3" class="step">
+    <div class="step-body">
+      <p class="step-q">What should we make next? <span class="new-badge">We read every answer</span></p>
+      <p class="step-hint">Tap everything that makes you say "yes please." Wild ideas welcome in the box below.</p>
+      <div class="pill-row" id="q3-pills">
+        <div class="pill" onclick="togglePill(this,'q3','sel-teal')">Tarragon asparagus pickle</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-teal')">IPA pickle</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-teal')">Pickled fiddlehead ferns</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-pink')">Strawberry champagne jam</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-pink')">Rhubarb ginger jam</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-pink')">Fig balsamic jam</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-pink')">Blood orange marmalade</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel')">Bourbon peach BBQ sauce</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel')">Blueberry BBQ sauce</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-green')">Stout mustard</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-green')">Tarragon white wine mustard</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-purple')">Salt &amp; Vine Brine</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-purple')">Honey &amp; Vine Brine</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-purple')">Hop &amp; Vine Brine</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-pink')">Tomato jam</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel')">Sweet Heat Carrot Jam</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-pink')">Bristol Cream Sherry Jelly</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-green')">Cranberry chutney</div>
+        <div class="pill" onclick="togglePill(this,'q3','sel-purple')">A spice blend I haven't seen</div>
+      </div>
+      <textarea id="q3_wild" name="q3_wild_idea_direct" placeholder="Got a wild idea? Pickled watermelon rind? A hot honey shrub? Spill it..."></textarea>
+    </div>
+    <div class="step-footer">
+      <button type="button" class="nav-btn btn-back" onclick="goStep(2)">← Back</button>
+      <span class="step-counter">Step 3 of 6</span>
+      <button type="button" class="nav-btn btn-next" onclick="goStep(4)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4 -->
+  <div id="step4" class="step">
+    <div class="step-body">
+      <p class="step-q">How do you usually hear about new local food products?</p>
+      <p class="step-hint">Helps us figure out where to show up.</p>
+      <div class="pill-row" id="q4-pills">
+        <div class="pill" onclick="togglePill(this,'q4','sel-green')">Farmers market — I browse</div>
+        <div class="pill" onclick="togglePill(this,'q4','sel-green')">A friend told me</div>
+        <div class="pill" onclick="togglePill(this,'q4','sel-purple')">Instagram</div>
+        <div class="pill" onclick="togglePill(this,'q4','sel-purple')">Facebook</div>
+        <div class="pill" onclick="togglePill(this,'q4','sel-teal')">Email newsletters</div>
+        <div class="pill" onclick="togglePill(this,'q4','sel')">Local news / press</div>
+        <div class="pill" onclick="togglePill(this,'q4','sel')">The Fermament — Wine Lounge</div>
+        <div class="pill" onclick="togglePill(this,'q4','sel')">Local Pop-Up Event</div>
+        <div class="pill" onclick="togglePill(this,'q4','sel')">Gift shops or specialty stores</div>
+        <div class="pill" onclick="togglePill(this,'q4','sel-pink')">I stumbled across the website</div>
+      </div>
+      <div class="section-divider"></div>
+      <p class="step-hint" style="margin-bottom:10px;">How often would you like to hear from us?</p>
+      <div class="pill-row" id="q4b-pills">
+        <div class="pill" onclick="selectOne(this,'q4b','sel-green')">When something new launches</div>
+        <div class="pill" onclick="selectOne(this,'q4b','sel-green')">Monthly roundup</div>
+        <div class="pill" onclick="selectOne(this,'q4b','sel-green')">Seasonal — 4× a year is enough</div>
+        <div class="pill" onclick="selectOne(this,'q4b','sel-green')">Whenever — surprise me</div>
+      </div>
+    </div>
+    <div class="step-footer">
+      <button type="button" class="nav-btn btn-back" onclick="goStep(3)">← Back</button>
+      <span class="step-counter">Step 4 of 6</span>
+      <button type="button" class="nav-btn btn-next" onclick="goStep(5)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5 -->
+  <div id="step5" class="step">
+    <div class="step-body">
+      <p class="step-q">How likely are you to tell someone about Yes We Can!?</p>
+      <p class="step-hint">1 = I barely mention it &nbsp;&middot;&nbsp; 5 = I hand out jars like business cards</p>
+      <div class="scale-btns" id="q5-scale">
+        <button type="button" class="scale-btn" onclick="setScale(this,1)">1</button>
+        <button type="button" class="scale-btn" onclick="setScale(this,2)">2</button>
+        <button type="button" class="scale-btn" onclick="setScale(this,3)">3</button>
+        <button type="button" class="scale-btn" onclick="setScale(this,4)">4</button>
+        <button type="button" class="scale-btn" onclick="setScale(this,5)">5</button>
+      </div>
+      <div class="scale-ends">
+        <span>not really</span>
+        <span>jar evangelist</span>
+      </div>
+      <div class="scale-label" id="scaleLabel"></div>
+      <div class="section-divider"></div>
+      <label class="field-label" for="q5_free">Anything else you want Lori to know? <span class="field-sub">(optional)</span></label>
+      <textarea id="q5_free" placeholder="A wild idea, a request, a compliment, a complaint — all welcome here..."></textarea>
+    </div>
+    <div class="step-footer">
+      <button type="button" class="nav-btn btn-back" onclick="goStep(4)">← Back</button>
+      <span class="step-counter">Step 5 of 6</span>
+      <button type="button" class="nav-btn btn-next" onclick="goStep(6)">Almost done →</button>
+    </div>
+  </div>
+
+  <!-- STEP 6 -->
+  <div id="step6" class="step">
+    <div class="step-body">
+      <p class="step-q">Get in the Jar — drop your email below.</p>
+      <p class="step-hint">First to know when new products launch. Early access. The occasional pickle joke. No spam, ever — unsubscribe any time.</p>
+      <label class="field-label" for="nameField">First name <span class="field-sub">(optional — we like knowing who we're talking to)</span></label>
+      <input type="text" id="nameField" name="first_name" placeholder="Your first name">
+      <label class="field-label" for="emailField">Email address <span class="field-sub">(required to join the list)</span></label>
+      <input type="email" id="emailField" name="email" placeholder="your@email.com" autocomplete="email">
+      <p class="err" id="emailErr">Please enter a valid email address to join the list.</p>
+      <p style="font-size:.72rem;color:#6B5C48;line-height:1.6;margin-top:4px;">Yes We Can! &middot; Dover, NH &middot; yeswecanpickle.com<br>Your info stays with Lori, full stop. No third-party sharing, ever.</p>
+    </div>
+    <div class="step-footer">
+      <button type="button" class="nav-btn btn-back" onclick="goStep(5)">← Back</button>
+      <span class="step-counter">Step 6 of 6</span>
+      <button type="button" class="nav-btn btn-submit" onclick="submitForm()">✓ Join the list</button>
+    </div>
+  </div>
+
+</form>
+
+<!-- THANK YOU -->
+<div id="thankYou">
+  <div class="ty-jar">🫙</div>
+  <p class="ty-h" id="tyName">You're in the Jar.</p>
+  <p class="ty-p">Lori will be in touch when something new is coming to the table — new products, market dates, and the occasional behind-the-scenes story from the Mama Shugs kitchen in Manchester.</p>
+  <p class="ty-wishlist" id="tyWishlist"></p>
+  <div class="ty-brand">Yes We Can! &middot; Lori Nollet &middot; Dover, NH &middot; yeswecanpickle.com</div>
+  <div style="margin-top:16px;"><a href="https://www.yeswecanpickle.com" style="font-family:'Barlow',sans-serif;font-size:.82rem;color:#3D6B42;text-decoration:none;border-bottom:1px solid #3D6B42;padding-bottom:1px;">← Back to yeswecanpickle.com</a></div>
+
+</div>
+
+<script>
+const TOTAL=6;
+function goStep(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById('step'+n);
+  if(el) el.classList.add('active');
+  window.scrollTo(0,0);
+  document.getElementById('progressFill').style.width=Math.round(((n-1)/(TOTAL))*100)+'%';
+}
+function toggleTile(el,q){
+  el.classList.toggle('sel'); updateTileVal(q);
+}
+function updateTileVal(q){
+  const vals=[];
+  document.querySelectorAll('#step1 .tile.sel .tile-lbl').forEach(t=>vals.push(t.textContent.trim()));
+  document.getElementById('q1_val').value=vals.join(', ');
+}
+const SEL_CLASSES=['sel','sel-green','sel-teal','sel-purple','sel-pink'];
+function togglePill(el,q,cls){
+  const active=SEL_CLASSES.some(c=>el.classList.contains(c));
+  if(active){ el.classList.remove(...SEL_CLASSES); }
+  else { el.classList.add(cls); }
+  updatePillVal(q);
+}
+function selectOne(el,q,cls){
+  const g=el.parentElement;
+  g.querySelectorAll('.pill').forEach(p=>p.classList.remove(...SEL_CLASSES));
+  el.classList.add(cls);
+  document.getElementById(q+'_val').value=el.textContent.trim();
+}
+function updatePillVal(q){
+  const vals=[];
+  document.querySelectorAll('#'+q+'-pills .pill').forEach(p=>{
+    if(SEL_CLASSES.some(c=>p.classList.contains(c))) vals.push(p.textContent.trim());
+  });
+  document.getElementById(q+'_val').value=vals.join(', ');
+}
+const SCALE_LABELS=['','Probably not spreading the word','Might mention it if it comes up','I talk about food I love','Pretty likely to recommend it','I am the word of mouth'];
+function setScale(btn,v){
+  document.querySelectorAll('#q5-scale .scale-btn').forEach((b,i)=>b.classList.toggle('lit',i<v));
+  document.getElementById('q5_val').value=v+'/5';
+  document.getElementById('scaleLabel').textContent=SCALE_LABELS[v]||'';
+}
+function submitForm(){
+  const email=document.getElementById('emailField').value.trim();
+  const name=document.getElementById('nameField').value.trim();
+  const err=document.getElementById('emailErr');
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    err.style.display='block'; return;
+  }
+  err.style.display='none';
+  document.getElementById('q5_free_val').value=document.getElementById('q5_free').value;
+  document.getElementById('q3_wild_val').value=document.getElementById('q3_wild').value;
+  const wishlist=document.getElementById('q3_val').value||'';
+  const form=document.getElementById('joinForm');
+  if(false){
+    document.getElementById('joinForm').style.display='none';
+    document.getElementById('tyName').textContent=name?'You\'re in the Jar, '+name+'.':'You\'re in the Jar.';
+    if(wishlist.length>2){
+      const tyW=document.getElementById('tyWishlist');
+      tyW.textContent='And yes — we saw your wishlist. "'+wishlist.split(',')[0].trim()+'" is noted.';
+      tyW.style.display='block';
+    }
+    document.getElementById('thankYou').style.display='block';
+    document.getElementById('progressFill').style.width='100%';
+    window.scrollTo(0,0);
+    return;
+  }
+  const data=new FormData(form);
+  fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'}})
+    .then(r=>{
+      document.getElementById('joinForm').style.display='none';
+      document.getElementById('tyName').textContent=name?'You\'re in the Jar, '+name+'.':'You\'re in the Jar.';
+      if(wishlist.length>2){
+        const tyW=document.getElementById('tyWishlist');
+        tyW.textContent='And yes — we saw your wishlist. "'+wishlist.split(',')[0].trim()+'" is noted.';
+        tyW.style.display='block';
+      }
+      document.getElementById('thankYou').style.display='block';
+      document.getElementById('progressFill').style.width='100%';
+      window.scrollTo(0,0);
+    })
+    .catch(()=>form.submit());
+}
+</script>
+</body>
+</html>
