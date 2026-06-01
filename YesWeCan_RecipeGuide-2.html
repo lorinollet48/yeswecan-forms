@@ -1,0 +1,1511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yes We Can! — Recipe Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Barlow:wght@300;400;500&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --green:#2A4A2E;--green-mid:#3D6B42;--green-light:#8AB48E;--green-pale:#EAF3DE;
+  --amber:#C07B1A;--amber-pale:#FBF2DF;--cream:#FAF6EF;--parch:#F0E8D8;
+  --text:#201810;--muted:#6B5C48;--border:#D8CCBA;
+  --spice:#5A2A10;--spice-pale:#F2E8DF;
+  --core:#2A4A2E;--core-pale:#EAF3DE;
+  --soon:#185FA5;--soon-pale:#DDE9F6;
+  --shrub:#1D9E75;--shrub-pale:#DFF5F0;
+  --nut:#4A1B0C;--nut-pale:#FAECE7;
+}
+body{background:var(--cream);color:var(--text);font-family:'Barlow',sans-serif;line-height:1.5;}
+
+/* HEADER */
+.site-hdr{background:var(--green);padding:28px 24px 22px;position:relative;overflow:hidden;}
+.site-hdr::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 1px,transparent 1px,transparent 32px),repeating-linear-gradient(-45deg,rgba(255,255,255,.025) 0,rgba(255,255,255,.025) 1px,transparent 1px,transparent 32px);pointer-events:none;}
+.hdr-inner{position:relative;max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:20px;}
+.hdr-text h1{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:#fff;line-height:1.1;}
+.hdr-text h1 em{font-style:italic;color:var(--green-light);}
+.hdr-text p{font-size:.82rem;color:var(--green-light);margin-top:5px;}
+.hdr-count{margin-left:auto;text-align:right;flex-shrink:0;}
+.hdr-count .num{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--green-light);line-height:1;}
+.hdr-count .lbl{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.45);}
+
+/* NAV */
+.nav-bar{background:var(--green-mid);border-bottom:1px solid rgba(0,0,0,.1);}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;gap:0;overflow-x:auto;}
+.nav-tab{font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6);padding:12px 20px;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap;transition:all .15s;background:none;border-left:none;border-right:none;border-top:none;}
+.nav-tab:hover{color:rgba(255,255,255,.9);}
+.nav-tab.active-spice{color:#fff;border-bottom-color:#E8A87C;}
+.nav-tab.active-core{color:#fff;border-bottom-color:var(--green-light);}
+.nav-tab.active-soon{color:#fff;border-bottom-color:#90B8E8;}
+
+/* MAIN */
+.main{max-width:1100px;margin:0 auto;padding:32px 24px 64px;}
+.section{display:none;}
+.section.active{display:block;}
+
+/* SECTION INTRO */
+.section-intro{margin-bottom:28px;padding:16px 20px;border-radius:8px;border-left:4px solid;}
+.section-intro.spice{background:var(--spice-pale);border-color:var(--spice);}
+.section-intro.core{background:var(--core-pale);border-color:var(--core);}
+.section-intro.soon{background:var(--soon-pale);border-color:var(--soon);}
+.section-intro p{font-size:.88rem;color:var(--muted);line-height:1.6;}
+.section-intro strong{color:var(--text);}
+
+/* PRODUCT BLOCK */
+.product-block{margin-bottom:44px;}
+.prod-hdr{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:12px;border-bottom:2px solid;}
+.prod-hdr.spice{border-color:var(--spice-pale);}
+.prod-hdr.core{border-color:var(--green-pale);}
+.prod-hdr.soon{border-color:var(--soon-pale);}
+.prod-badge{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:4px 11px;border-radius:3px;color:#fff;white-space:nowrap;}
+.badge-spice{background:var(--spice);}
+.badge-core{background:var(--green);}
+.badge-soon{background:var(--soon);}
+.prod-name{font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:700;color:var(--text);}
+.prod-meta{font-size:.78rem;color:var(--muted);margin-left:auto;text-align:right;}
+.allergen-flag{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.08em;padding:3px 8px;border-radius:3px;background:var(--nut-pale);color:var(--nut);border:1px solid var(--nut);margin-left:8px;vertical-align:middle;}
+
+/* RECIPE GRID */
+.recipe-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:16px;margin-bottom:16px;}
+
+/* RECIPE CARD */
+.recipe-card{background:#fff;border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;}
+.recipe-card-top{padding:4px 0 0;border-bottom:none;}
+.recipe-accent{height:4px;width:100%;}
+.accent-spice{background:var(--spice);}
+.accent-core{background:var(--green);}
+.accent-soon{background:var(--soon);}
+.recipe-body{padding:16px 18px 14px;flex:1;display:flex;flex-direction:column;}
+.recipe-type{font-family:'Barlow Condensed',sans-serif;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.recipe-name{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:600;color:var(--text);margin-bottom:10px;line-height:1.3;}
+.recipe-desc{font-size:.83rem;color:var(--muted);line-height:1.6;margin-bottom:12px;flex:1;}
+
+/* INGREDIENTS */
+.ing-section{margin-bottom:10px;}
+.ing-label{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.ing-list{list-style:none;}
+.ing-list li{font-size:.82rem;color:var(--text);padding:3px 0;border-bottom:1px solid var(--parch);display:flex;justify-content:space-between;gap:8px;}
+.ing-list li:last-child{border-bottom:none;}
+.ing-amount{font-weight:500;color:var(--text);white-space:nowrap;}
+.ing-name{color:var(--muted);}
+.ing-hero{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:700;color:var(--green);border-bottom-color:var(--green-pale)!important;}
+.ing-hero .ing-name{color:var(--green);}
+
+/* METHOD */
+.method-section{margin-bottom:10px;}
+.method-label{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.method-steps{list-style:none;counter-reset:steps;}
+.method-step{font-size:.82rem;color:var(--text);line-height:1.55;padding:4px 0 4px 22px;position:relative;border-bottom:1px solid var(--parch);}
+.method-step:last-child{border-bottom:none;}
+.method-step::before{counter-increment:steps;content:counter(steps);position:absolute;left:0;top:5px;width:16px;height:16px;background:var(--green-pale);color:var(--green);border-radius:50%;font-size:.65rem;font-weight:700;display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;}
+
+/* CROSS-PROMO */
+.cross-promo{background:var(--parch);border-radius:6px;padding:10px 12px;margin-top:auto;}
+.cross-label{font-family:'Barlow Condensed',sans-serif;font-size:.63rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:6px;}
+.cross-items{display:flex;flex-wrap:wrap;gap:5px;}
+.cross-pill{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:600;padding:3px 9px;border-radius:20px;background:#fff;border:1px solid var(--border);color:var(--muted);line-height:1.3;}
+
+/* SERVES */
+.serves-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.serves-badge{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--green-pale);color:var(--green);}
+.time-badge{font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:600;padding:2px 8px;border-radius:20px;background:var(--amber-pale);color:var(--amber);}
+
+/* PRINT */
+@media print{
+  .nav-bar,.section-intro{display:none;}
+  .section{display:block!important;}
+  .recipe-card{page-break-inside:avoid;}
+}
+@media(max-width:600px){
+  .main{padding:20px 16px 48px;}
+  .hdr-inner{flex-direction:column;gap:12px;}
+  .hdr-count{margin-left:0;text-align:left;}
+  .recipe-grid{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<header class="site-hdr">
+  <div class="hdr-inner">
+    <div class="hdr-text">
+      <h1>Yes We Can! <em>Recipe Guide</em></h1>
+      <p>Every product. Every recipe. Cross-pairings that make the whole lineup better together.</p>
+    </div>
+    <div class="hdr-count">
+      <div class="num">34</div>
+      <div class="lbl">Recipes</div>
+    </div>
+  </div>
+</header>
+
+<nav class="nav-bar">
+  <div class="nav-inner">
+    <button class="nav-tab active-spice" onclick="showSection('spice',this)">Spice Blends</button>
+    <button class="nav-tab" onclick="showSection('core',this)">Core Product Line</button>
+    <button class="nav-tab" onclick="showSection('soon',this)">Coming Soon</button>
+  </div>
+</nav>
+
+<main class="main">
+
+<!-- ══════════════════════════════════════════════════════════
+     SPICE BLENDS
+═══════════════════════════════════════════════════════════ -->
+<div id="section-spice" class="section active">
+  <div class="section-intro spice">
+    <p><strong>Six handcrafted spice blends, available now.</strong> Each blend is designed to pair directly with a Yes We Can! preserve or pickle. Use the pairing suggestions to build a complete board or meal from the lineup.</p>
+  </div>
+
+  <!-- FRIDAY FISH BLEND -->
+  <div class="product-block">
+    <div class="prod-hdr spice">
+      <span class="prod-badge badge-spice">Spice Blend</span>
+      <span class="prod-name">Friday Fish Blend</span>
+      <span class="prod-meta">2 oz · $10</span>
+    </div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-spice"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Main · 20 minutes</div>
+          <div class="recipe-name">Pan-Seared Salmon with Lemon Herb Crust</div>
+          <div class="serves-row"><span class="serves-badge">Serves 2</span><span class="time-badge">20 min</span></div>
+          <div class="recipe-desc">The Friday Fish Blend was built for this — smoked paprika gives the crust color, dill and thyme bridge to the brine flavors in the lineup, and the lemon peel ties it to a Blood Orange Marmalade glaze that finishes the whole dish.</div>
+          <div class="ing-section">
+            <div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Friday Fish Blend</span><span class="ing-amount">1½ tsp</span></li>
+              <li><span class="ing-name">Salmon fillets, skin-on</span><span class="ing-amount">2 × 6 oz</span></li>
+              <li><span class="ing-name">Olive oil</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Blood Orange Marmalade</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Butter</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Lemon wedges</span><span class="ing-amount">to serve</span></li>
+            </ul>
+          </div>
+          <div class="method-section">
+            <div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Pat salmon dry. Press Friday Fish Blend onto flesh side, pressing to adhere.</li>
+              <li class="method-step">Heat olive oil in a cast iron skillet over medium-high until shimmering. Add salmon skin-side up. Cook 3–4 minutes until golden crust forms.</li>
+              <li class="method-step">Flip. Add butter and Blood Orange Marmalade to pan. Spoon over salmon as it melts. Cook 2–3 more minutes for medium.</li>
+              <li class="method-step">Rest 2 minutes. Serve with pan glaze spooned over and lemon alongside.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo">
+            <div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Blood Orange Marmalade — glaze</span>
+              <span class="cross-pill">Hot Pepper Jelly — dipping sauce</span>
+              <span class="cross-pill">Garlic Dill Pickle — slaw base</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card">
+        <div class="recipe-accent accent-spice"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Tacos · 30 minutes</div>
+          <div class="recipe-name">Friday Fish Tacos with Pickled Slaw</div>
+          <div class="serves-row"><span class="serves-badge">Serves 4</span><span class="time-badge">30 min</span></div>
+          <div class="recipe-desc">The blend's dill and lemon are built for a classic fish taco. Garlic Dill Pickle brine does the work in the slaw — no extra vinegar needed. Hot Pepper Jelly crema is the move that people ask about.</div>
+          <div class="ing-section">
+            <div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Friday Fish Blend</span><span class="ing-amount">2 tsp</span></li>
+              <li><span class="ing-name">White fish (cod, halibut, tilapia)</span><span class="ing-amount">1 lb</span></li>
+              <li><span class="ing-name">Garlic Dill Pickle — chop + 2 tbsp brine</span><span class="ing-amount">¼ cup</span></li>
+              <li><span class="ing-name">Hot Pepper Jelly + sour cream</span><span class="ing-amount">2 tbsp each</span></li>
+              <li><span class="ing-name">Cabbage, shredded</span><span class="ing-amount">1 cup</span></li>
+              <li><span class="ing-name">Small flour tortillas</span><span class="ing-amount">8</span></li>
+            </ul>
+          </div>
+          <div class="method-section">
+            <div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Toss cabbage with 2 tbsp pickle brine and a pinch of salt. Rest 15 min for quick slaw.</li>
+              <li class="method-step">Coat fish in Friday Fish Blend. Sear in olive oil 3 min per side until flaky.</li>
+              <li class="method-step">Mix Hot Pepper Jelly and sour cream for crema.</li>
+              <li class="method-step">Build tacos: fish, slaw, chopped pickles, jelly crema. Serve immediately.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo">
+            <div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Garlic Dill Pickle — slaw</span>
+              <span class="cross-pill">Hot Pepper Jelly — crema</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHUCKWAGON BRISKET -->
+  <div class="product-block">
+    <div class="prod-hdr spice">
+      <span class="prod-badge badge-spice">Spice Blend</span>
+      <span class="prod-name">Chuckwagon Brisket Blend</span>
+      <span class="prod-meta">4 oz · $14</span>
+    </div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-spice"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Main · Low & Slow</div>
+          <div class="recipe-name">Low & Slow Smoked Brisket</div>
+          <div class="serves-row"><span class="serves-badge">Serves 8–10</span><span class="time-badge">8–12 hrs</span></div>
+          <div class="recipe-desc">The Chuckwagon blend is built for this — coarse black pepper and smoked paprika form the bark, dry mustard adds the back-heat Texas pitmasters depend on. Mop with Dr. Pepper BBQ Sauce in the final hour for a lacquered finish.</div>
+          <div class="ing-section">
+            <div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Chuckwagon Brisket Blend</span><span class="ing-amount">3 tbsp</span></li>
+              <li><span class="ing-name">Beef brisket, full flat</span><span class="ing-amount">8–10 lbs</span></li>
+              <li><span class="ing-name">Yellow mustard (binder)</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Dr. Pepper BBQ Sauce — mop</span><span class="ing-amount">½ cup</span></li>
+              <li><span class="ing-name">Bread & Butter Pickles — serve</span><span class="ing-amount">alongside</span></li>
+            </ul>
+          </div>
+          <div class="method-section">
+            <div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Apply thin mustard coat to brisket as binder. Press Chuckwagon blend on all surfaces. Rest overnight in refrigerator.</li>
+              <li class="method-step">Smoke fat-side up at 225°F over oak or hickory. Internal temp 165°F (~5–6 hrs).</li>
+              <li class="method-step">Wrap in butcher paper. Continue smoking to 203–205°F (~3–4 more hrs).</li>
+              <li class="method-step">Rest 1 hour wrapped. Unwrap and brush Dr. Pepper BBQ Sauce. Return to smoker uncovered 15 min to set glaze.</li>
+              <li class="method-step">Slice against the grain. Serve with Bread & Butter Pickles and extra sauce.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo">
+            <div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Dr. Pepper BBQ Sauce — mop &amp; table</span>
+              <span class="cross-pill">Bread & Butter Pickles — alongside</span>
+              <span class="cross-pill">Spiced Whole Grain Mustard — table</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card">
+        <div class="recipe-accent accent-spice"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Burgers · 20 minutes</div>
+          <div class="recipe-name">Chuckwagon Smash Burgers</div>
+          <div class="serves-row"><span class="serves-badge">Serves 4</span><span class="time-badge">20 min</span></div>
+          <div class="recipe-desc">The blend's coarse pepper and paprika form a phenomenal crust on a smash burger. B&B Pickles are non-negotiable. Dr. Pepper BBQ Sauce in the burger sauce changes the whole game.</div>
+          <div class="ing-section">
+            <div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Chuckwagon Brisket Blend</span><span class="ing-amount">2 tsp</span></li>
+              <li><span class="ing-name">Ground beef 80/20</span><span class="ing-amount">1½ lbs</span></li>
+              <li><span class="ing-name">Bread & Butter Pickles</span><span class="ing-amount">8–12 slices</span></li>
+              <li><span class="ing-name">Dr. Pepper BBQ Sauce + mayo</span><span class="ing-amount">2 tbsp each</span></li>
+              <li><span class="ing-name">American cheese</span><span class="ing-amount">4 slices</span></li>
+              <li><span class="ing-name">Brioche buns, toasted</span><span class="ing-amount">4</span></li>
+            </ul>
+          </div>
+          <div class="method-section">
+            <div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Divide beef into 4 loose balls (6 oz each). Season outside with Chuckwagon blend.</li>
+              <li class="method-step">Heat cast iron to smoking hot. Place ball, smash with spatula to thin patty. Cook 2–3 min until crust forms.</li>
+              <li class="method-step">Flip, immediately top with cheese. Cover 30 sec to melt.</li>
+              <li class="method-step">Mix BBQ sauce and mayo for burger sauce. Build: sauce, patty, B&B pickles.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo">
+            <div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Dr. Pepper BBQ Sauce — burger sauce</span>
+              <span class="cross-pill">Bread & Butter Pickles — on the burger</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HUNTER'S CABIN DUCK -->
+  <div class="product-block">
+    <div class="prod-hdr spice">
+      <span class="prod-badge badge-spice">Spice Blend</span>
+      <span class="prod-name">Hunter's Cabin Duck Blend</span>
+      <span class="prod-meta">2 oz · $10</span>
+    </div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-spice"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Main · 45 minutes</div>
+          <div class="recipe-name">Five-Spice Duck Breast</div>
+          <div class="serves-row"><span class="serves-badge">Serves 2</span><span class="time-badge">45 min</span></div>
+          <div class="recipe-desc">Classic French technique, Chinese-inspired spice, New Hampshire jar. Score the skin, render it slowly, let the five-spice bloom in the fat. Hot Pepper Jelly as a finishing drizzle bridges sweet and heat perfectly.</div>
+          <div class="ing-section">
+            <div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Hunter's Cabin Duck Blend</span><span class="ing-amount">1½ tsp</span></li>
+              <li><span class="ing-name">Duck breasts, skin-on</span><span class="ing-amount">2</span></li>
+              <li><span class="ing-name">Hot Pepper Jelly — finish</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Flaky sea salt</span><span class="ing-amount">pinch</span></li>
+            </ul>
+          </div>
+          <div class="method-section">
+            <div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Score skin in crosshatch pattern — do not cut into meat. Rub Duck Blend on flesh side and lightly on skin. Rest 30 min at room temp.</li>
+              <li class="method-step">Place skin-side down in cold pan. Bring to medium heat slowly — this renders the fat and creates the bark rather than steaming.</li>
+              <li class="method-step">Cook skin-side down 8–10 min until deep golden. Tip off rendered fat as needed. Flip, cook 3–4 min for medium-rare (130°F).</li>
+              <li class="method-step">Rest 5 min. Slice thin. Drizzle Hot Pepper Jelly over slices. Finish with flaky salt.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo">
+            <div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Hot Pepper Jelly — finishing drizzle</span>
+              <span class="cross-pill">Apple Bourbon Jam — glaze variation</span>
+              <span class="cross-pill">Fig Balsamic Jam — board companion</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card">
+        <div class="recipe-accent accent-spice"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Appetizer / Board · 5 minutes</div>
+          <div class="recipe-name">Hunter's Cabin Labneh Dip</div>
+          <div class="serves-row"><span class="serves-badge">Serves 6–8</span><span class="time-badge">5 min</span></div>
+          <div class="recipe-desc">Labneh is the canvas — the Duck Blend does everything else. A drizzle of Hot Pepper Jelly adds the heat that keeps people coming back for more. Serve with warm pita or sturdy crackers.</div>
+          <div class="ing-section">
+            <div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Hunter's Cabin Duck Blend</span><span class="ing-amount">1–1½ tsp</span></li>
+              <li><span class="ing-name">Labneh or full-fat Greek yogurt</span><span class="ing-amount">1 cup</span></li>
+              <li><span class="ing-name">Good olive oil</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Hot Pepper Jelly</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Flaky sea salt</span><span class="ing-amount">pinch</span></li>
+              <li><span class="ing-name">Warm pita or crackers</span><span class="ing-amount">to serve</span></li>
+            </ul>
+          </div>
+          <div class="method-section">
+            <div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Stir Duck Blend into labneh until fully incorporated.</li>
+              <li class="method-step">Spread onto a board or shallow bowl. Create swirls with the back of a spoon.</li>
+              <li class="method-step">Drizzle olive oil generously over the top. Add a small spoonful of Hot Pepper Jelly in the center.</li>
+              <li class="method-step">Finish with flaky salt. Serve immediately with warm pita.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo">
+            <div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Hot Pepper Jelly — drizzle</span>
+              <span class="cross-pill">Bristol Cream Sherry Jelly — elegant board version</span>
+              <span class="cross-pill">Pickled Hot Honey Carrots — board anchor</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DOC'S BACKYARD BBQ -->
+  <div class="product-block">
+    <div class="prod-hdr spice">
+      <span class="prod-badge badge-spice">Spice Blend</span>
+      <span class="prod-name">Doc's Backyard BBQ Blend</span>
+      <span class="prod-meta">2 oz · $10</span>
+    </div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-spice"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Main · 45 minutes</div>
+          <div class="recipe-name">BBQ Spiced Chicken Thighs</div>
+          <div class="serves-row"><span class="serves-badge">Serves 4</span><span class="time-badge">45 min</span></div>
+          <div class="recipe-desc">Doc's brown sugar caramelizes on the chicken skin to create a bark that rivals a proper BBQ joint. Dr. Pepper BBQ Sauce applied in the last few minutes gives you the lacquered finish. Bread & Butter Pickles cut right through it.</div>
+          <div class="ing-section">
+            <div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Doc's Backyard BBQ Blend</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Bone-in chicken thighs, skin-on</span><span class="ing-amount">6–8</span></li>
+              <li><span class="ing-name">Olive oil</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Dr. Pepper BBQ Sauce</span><span class="ing-amount">¼ cup</span></li>
+              <li><span class="ing-name">Bread & Butter Pickles — serve</span><span class="ing-amount">alongside</span></li>
+            </ul>
+          </div>
+          <div class="method-section">
+            <div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Coat chicken in olive oil. Press Doc's blend on all sides, including under the skin. Rest 30 min or overnight.</li>
+              <li class="method-step">Grill or oven-roast at 425°F for 35 min until skin is golden and crackling.</li>
+              <li class="method-step">Brush Dr. Pepper BBQ Sauce over chicken. Cook 5 more minutes to set glaze.</li>
+              <li class="method-step">Rest 5 min. Serve with extra sauce and Bread & Butter Pickles alongside.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo">
+            <div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Dr. Pepper BBQ Sauce — mop &amp; serve</span>
+              <span class="cross-pill">Bread & Butter Pickles — alongside</span>
+              <span class="cross-pill">Christmas Pickle — table side</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card">
+        <div class="recipe-accent accent-spice"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Main · 3 hours</div>
+          <div class="recipe-name">Dry-Rub Baby Back Ribs</div>
+          <div class="serves-row"><span class="serves-badge">Serves 4</span><span class="time-badge">3 hrs</span></div>
+          <div class="recipe-desc">Ribs built for the backyard, finished with a jar. The dry rub is everything — Doc's cinnamon and allspice are the secret. Dr. Pepper BBQ Sauce in the last 20 minutes is the only sauce you need.</div>
+          <div class="ing-section">
+            <div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Doc's Backyard BBQ Blend</span><span class="ing-amount">3 tbsp</span></li>
+              <li><span class="ing-name">Baby back ribs, full rack</span><span class="ing-amount">2 racks</span></li>
+              <li><span class="ing-name">Yellow mustard (binder)</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Dr. Pepper BBQ Sauce</span><span class="ing-amount">½ cup</span></li>
+            </ul>
+          </div>
+          <div class="method-section">
+            <div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Remove membrane from back of ribs. Apply mustard binder, press Doc's blend on all surfaces. Rest overnight if possible.</li>
+              <li class="method-step">Wrap in foil. Cook at 275°F for 2½ hours until meat pulls from bone.</li>
+              <li class="method-step">Unwrap. Brush Dr. Pepper BBQ Sauce generously. Return to heat 20 min uncovered until sauce caramelizes.</li>
+              <li class="method-step">Rest 10 min. Cut between bones. Serve with extra sauce.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo">
+            <div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Dr. Pepper BBQ Sauce — finishing sauce</span>
+              <span class="cross-pill">Garlic Dill Pickle — table side</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MARTINIQUE -->
+  <div class="product-block">
+    <div class="prod-hdr spice">
+      <span class="prod-badge badge-spice">Spice Blend</span>
+      <span class="prod-name">Martinique Blend</span>
+      <span class="prod-meta">2 oz · $11</span>
+    </div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-spice"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Main · 30 minutes</div>
+          <div class="recipe-name">Martinique Jerk Chicken</div>
+          <div class="serves-row"><span class="serves-badge">Serves 4</span><span class="time-badge">30 min + marinade</span></div>
+          <div class="recipe-desc">Amchur (dried mango) and citrus peel are the soul of this blend — they tenderize and brighten simultaneously. Pineapple & Apple Chutney as the table sauce is the natural finish. The same tropical notes, different form.</div>
+          <div class="ing-section">
+            <div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Martinique Blend</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Chicken thighs, boneless</span><span class="ing-amount">1½ lbs</span></li>
+              <li><span class="ing-name">Olive oil</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Fresh lime juice</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Pineapple & Apple Chutney — serve</span><span class="ing-amount">alongside</span></li>
+            </ul>
+          </div>
+          <div class="method-section">
+            <div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Combine Martinique blend, olive oil, and lime juice. Coat chicken thoroughly. Marinate 2 hours minimum, overnight preferred.</li>
+              <li class="method-step">Grill or pan-sear over medium-high heat, 6–7 min per side until charred and cooked through.</li>
+              <li class="method-step">Rest 5 min. Slice and serve with Pineapple & Apple Chutney alongside.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo">
+            <div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Pineapple & Apple Chutney — table sauce</span>
+              <span class="cross-pill">Hot Pepper Jelly — heat layer</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card">
+        <div class="recipe-accent accent-spice"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Appetizer · 25 minutes</div>
+          <div class="recipe-name">Spiced Pineapple Pork Skewers</div>
+          <div class="serves-row"><span class="serves-badge">Serves 4</span><span class="time-badge">25 min</span></div>
+          <div class="recipe-desc">Martinique and pork shoulder is an excellent pairing — the mango acid tenderizes, the citrus zest brightens. Alternate with fresh pineapple on the skewer. Brush with Pineapple Chutney thinned with lime before serving.</div>
+          <div class="ing-section">
+            <div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Martinique Blend</span><span class="ing-amount">1½ tsp</span></li>
+              <li><span class="ing-name">Pork shoulder, 1" cubes</span><span class="ing-amount">1 lb</span></li>
+              <li><span class="ing-name">Fresh pineapple, 1" cubes</span><span class="ing-amount">1 cup</span></li>
+              <li><span class="ing-name">Pineapple & Apple Chutney + lime juice</span><span class="ing-amount">2 tbsp + 1 tbsp</span></li>
+              <li><span class="ing-name">Olive oil</span><span class="ing-amount">1 tbsp</span></li>
+            </ul>
+          </div>
+          <div class="method-section">
+            <div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Toss pork in olive oil and Martinique blend. Rest 30 min.</li>
+              <li class="method-step">Thread alternating pork and pineapple onto soaked skewers.</li>
+              <li class="method-step">Grill over medium-high, turning every 3–4 min, 12–15 min total.</li>
+              <li class="method-step">Thin chutney with lime juice. Brush over skewers off heat. Serve immediately.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo">
+            <div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Pineapple & Apple Chutney — glaze &amp; dip</span>
+              <span class="cross-pill">Salt & Vine Brine — marinade base</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CLEO'S KISS -->
+  <div class="product-block">
+    <div class="prod-hdr spice">
+      <span class="prod-badge badge-spice">Spice Blend</span>
+      <span class="prod-name">Cleo's Kiss Blend <span class="allergen-flag">Contains: Tree Nuts</span></span>
+      <span class="prod-meta">2 oz · $13</span>
+    </div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-spice"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Board · 10 minutes</div>
+          <div class="recipe-name">Egyptian Dukkah Board</div>
+          <div class="serves-row"><span class="serves-badge">Serves 4–6</span><span class="time-badge">10 min</span></div>
+          <div class="recipe-desc">The oldest way to eat dukkah — olive oil, bread, and the blend. Pickled Hot Honey Carrots as the board anchor add color and heat. Hot Pepper Jelly brings another layer. This is the board that sells the entire Yes We Can! lineup.</div>
+          <div class="ing-section">
+            <div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Cleo's Kiss Blend</span><span class="ing-amount">3 tbsp</span></li>
+              <li><span class="ing-name">Good olive oil — dipping</span><span class="ing-amount">¼ cup</span></li>
+              <li><span class="ing-name">Warm pita or sourdough</span><span class="ing-amount">1 loaf</span></li>
+              <li><span class="ing-name">Pickled Hot Honey Carrots</span><span class="ing-amount">½ cup</span></li>
+              <li><span class="ing-name">Hot Pepper Jelly</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Aged cheese (manchego, aged cheddar)</span><span class="ing-amount">4 oz</span></li>
+            </ul>
+          </div>
+          <div class="method-section">
+            <div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Pour olive oil into a small shallow bowl. Spoon Cleo's Kiss blend alongside for dipping.</li>
+              <li class="method-step">Arrange Pickled Hot Honey Carrots at center of board as anchor.</li>
+              <li class="method-step">Add Hot Pepper Jelly in a small ramekin. Cheese on the board.</li>
+              <li class="method-step">Serve warm pita alongside. Instruct: dip bread in oil, then press into blend.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo">
+            <div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Hot Pepper Jelly — board heat</span>
+              <span class="cross-pill">Pickled Hot Honey Carrots — centerpiece</span>
+              <span class="cross-pill">Spiced Whole Grain Mustard — olive oil blend</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="recipe-card">
+        <div class="recipe-accent accent-spice"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Side · 35 minutes</div>
+          <div class="recipe-name">Cleo's Kiss Roasted Carrots</div>
+          <div class="serves-row"><span class="serves-badge">Serves 4</span><span class="time-badge">35 min</span></div>
+          <div class="recipe-desc">Roasted carrots and Cleo's Kiss is the Yes We Can! carrot story told two ways. The blend's cumin and coriander are natural carrot spices. Served alongside the Pickled Hot Honey Carrots on the same plate — the contrast is the whole point.</div>
+          <div class="ing-section">
+            <div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Cleo's Kiss Blend</span><span class="ing-amount">1½ tsp</span></li>
+              <li><span class="ing-name">Carrots, peeled, halved lengthwise</span><span class="ing-amount">1 lb</span></li>
+              <li><span class="ing-name">Olive oil</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Honey</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Pickled Hot Honey Carrots — alongside</span><span class="ing-amount">¼ cup</span></li>
+              <li><span class="ing-name">Fresh mint or parsley</span><span class="ing-amount">garnish</span></li>
+            </ul>
+          </div>
+          <div class="method-section">
+            <div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Preheat oven to 425°F. Toss carrots with olive oil and Cleo's Kiss blend.</li>
+              <li class="method-step">Roast cut-side down 20 min until golden and caramelized at edges.</li>
+              <li class="method-step">Drizzle honey over carrots. Return to oven 8 more minutes.</li>
+              <li class="method-step">Plate roasted carrots. Arrange cold Pickled Hot Honey Carrots alongside. Garnish with herbs. Serve immediately — hot and cold contrast is the dish.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo">
+            <div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Pickled Hot Honey Carrots — served alongside</span>
+              <span class="cross-pill">Honey & Vine Brine — glaze finish</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     CORE PRODUCTS
+═══════════════════════════════════════════════════════════ -->
+<div id="section-core" class="section">
+  <div class="section-intro core">
+    <p><strong>The Yes We Can! core lineup.</strong> Pickles, jelly, BBQ sauce, and mustard — the products that started it all. Every recipe here pairs with at least one other Yes We Can! item for a meal or board worth coming back to.</p>
+  </div>
+
+  <!-- GARLIC DILL PICKLE -->
+  <div class="product-block">
+    <div class="prod-hdr core"><span class="prod-badge badge-core">Core Product</span><span class="prod-name">Garlic Dill Pickle</span><span class="prod-meta">16 oz · $11</span></div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-core"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Dressing · 5 minutes</div>
+          <div class="recipe-name">Pickle Brine Vinaigrette</div>
+          <div class="serves-row"><span class="serves-badge">Makes ½ cup</span><span class="time-badge">5 min</span></div>
+          <div class="recipe-desc">The brine already has acid, salt, and garlic. It needs almost nothing. Add Spiced Whole Grain Mustard as emulsifier and olive oil. This is the dressing that makes people ask what you put in it.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Garlic Dill Pickle brine</span><span class="ing-amount">3 tbsp</span></li>
+              <li class="ing-hero"><span class="ing-name">Spiced Whole Grain Mustard</span><span class="ing-amount">1 tsp</span></li>
+              <li><span class="ing-name">Good olive oil</span><span class="ing-amount">¼ cup</span></li>
+              <li><span class="ing-name">Honey</span><span class="ing-amount">1 tsp</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Combine brine, mustard, and honey in a small jar.</li>
+              <li class="method-step">Add olive oil, cap, and shake vigorously until emulsified.</li>
+              <li class="method-step">Taste and adjust — more brine for tang, more honey for balance.</li>
+              <li class="method-step">Dress greens immediately or store refrigerated up to 1 week.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Spiced Whole Grain Mustard — emulsifier</span>
+              <span class="cross-pill">Salt & Vine Brine — alternate acid base</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-accent accent-core"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Board · 15 minutes</div>
+          <div class="recipe-name">Classic Pickle & Charcuterie Board</div>
+          <div class="serves-row"><span class="serves-badge">Serves 6–8</span><span class="time-badge">15 min</span></div>
+          <div class="recipe-desc">The anchor board. Garlic Dill Pickle is the savory backbone. B&B Pickles add the sweet contrast. Hot Pepper Jelly gives the heat. Spiced Whole Grain Mustard ties it all together.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Garlic Dill Pickle</span><span class="ing-amount">6–8 spears</span></li>
+              <li class="ing-hero"><span class="ing-name">Hot Pepper Jelly</span><span class="ing-amount">3 tbsp</span></li>
+              <li class="ing-hero"><span class="ing-name">Spiced Whole Grain Mustard</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Assorted charcuterie (prosciutto, salami)</span><span class="ing-amount">6 oz</span></li>
+              <li><span class="ing-name">Aged cheddar, manchego, or brie</span><span class="ing-amount">6 oz</span></li>
+              <li><span class="ing-name">Crackers and bread</span><span class="ing-amount">to fill</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Place mustard and jelly in small ramekins. Anchor them first — they're the reference points everything else organizes around.</li>
+              <li class="method-step">Add cheese in clusters. Fold charcuterie in ribbons between cheese.</li>
+              <li class="method-step">Tuck Garlic Dill Pickle spears alongside meats. Add crackers and bread last to fill gaps.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Hot Pepper Jelly — board heat</span>
+              <span class="cross-pill">Spiced Whole Grain Mustard — condiment</span>
+              <span class="cross-pill">Bread & Butter Pickles — sweet contrast</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BREAD & BUTTER PICKLES -->
+  <div class="product-block">
+    <div class="prod-hdr core"><span class="prod-badge badge-core">Core Product</span><span class="prod-name">Bread & Butter Pickles</span><span class="prod-meta">16 oz · $11</span></div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-core"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Sandwich · 30 minutes</div>
+          <div class="recipe-name">BBQ Pulled Pork with B&B Pickles</div>
+          <div class="serves-row"><span class="serves-badge">Serves 6</span><span class="time-badge">30 min (with leftover pork)</span></div>
+          <div class="recipe-desc">The B&B Pickle sweet crunch is made for pulled pork — it cuts through the fat the way nothing else does. Doc's Backyard BBQ Blend on the pork, Dr. Pepper BBQ Sauce to finish. Three Yes We Can! products, one unforgettable sandwich.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Bread & Butter Pickles</span><span class="ing-amount">½ cup sliced</span></li>
+              <li class="ing-hero"><span class="ing-name">Doc's Backyard BBQ Blend</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Pork shoulder or leftover pulled pork</span><span class="ing-amount">2 lbs</span></li>
+              <li><span class="ing-name">Dr. Pepper BBQ Sauce</span><span class="ing-amount">⅓ cup</span></li>
+              <li><span class="ing-name">Brioche buns, toasted</span><span class="ing-amount">6</span></li>
+              <li><span class="ing-name">Coleslaw or cabbage</span><span class="ing-amount">1 cup</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Rub pork with Doc's Backyard BBQ Blend. Slow cook at 275°F for 6–8 hours until pull-apart tender. Shred with two forks.</li>
+              <li class="method-step">Toss shredded pork with Dr. Pepper BBQ Sauce. Heat through.</li>
+              <li class="method-step">Build sandwich on toasted brioche: pork, coleslaw, a generous layer of Bread & Butter Pickles. The sweet crunch is the whole point.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Doc's Backyard BBQ Blend — pork rub</span>
+              <span class="cross-pill">Dr. Pepper BBQ Sauce — sauce</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-accent accent-core"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Comfort Food · 15 minutes</div>
+          <div class="recipe-name">B&B Pickle Smash Grilled Cheese</div>
+          <div class="serves-row"><span class="serves-badge">Serves 2</span><span class="time-badge">15 min</span></div>
+          <div class="recipe-desc">Pickles in a grilled cheese is a revelation. The sweet brine of the B&B cuts through the sharp cheddar. Hot Pepper Jelly stirred into the butter before grilling is the move that takes it from comfort food to something memorable.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Bread & Butter Pickles</span><span class="ing-amount">¼ cup sliced</span></li>
+              <li class="ing-hero"><span class="ing-name">Hot Pepper Jelly</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Sharp cheddar, sliced</span><span class="ing-amount">4 oz</span></li>
+              <li><span class="ing-name">Sourdough bread</span><span class="ing-amount">4 slices</span></li>
+              <li><span class="ing-name">Salted butter</span><span class="ing-amount">2 tbsp</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Mix softened butter with Hot Pepper Jelly. Spread on outside of bread slices.</li>
+              <li class="method-step">Layer cheddar on inside, then a generous layer of B&B pickles.</li>
+              <li class="method-step">Cook in pan over medium heat, pressing gently, until golden and cheese is melted — about 4 min per side.</li>
+              <li class="method-step">Rest 1 min before cutting. The pickle brine will run slightly — that's the point.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Hot Pepper Jelly — butter mix</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOT PEPPER JELLY -->
+  <div class="product-block">
+    <div class="prod-hdr core"><span class="prod-badge badge-core">Core Product</span><span class="prod-name">Hot Pepper Jelly</span><span class="prod-meta">8 oz · $10</span></div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-core"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Appetizer · 5 minutes</div>
+          <div class="recipe-name">Cream Cheese & Pepper Jelly Platter</div>
+          <div class="serves-row"><span class="serves-badge">Serves 8</span><span class="time-badge">5 min</span></div>
+          <div class="recipe-desc">The classic that never fails. Hot Pepper Jelly poured over cream cheese is the most approachable Yes We Can! appetizer. Add Spiced Whole Grain Mustard and Cleo's Kiss on the same board to round it out.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Hot Pepper Jelly</span><span class="ing-amount">4–5 tbsp</span></li>
+              <li><span class="ing-name">Cream cheese, softened block</span><span class="ing-amount">8 oz</span></li>
+              <li><span class="ing-name">Crackers</span><span class="ing-amount">to serve</span></li>
+              <li><span class="ing-name">Spiced Whole Grain Mustard — board</span><span class="ing-amount">1 tbsp</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Place block of cream cheese on a board or shallow bowl.</li>
+              <li class="method-step">Spoon Hot Pepper Jelly generously over the top — let it cascade down the sides.</li>
+              <li class="method-step">Arrange crackers around. Add Spiced Whole Grain Mustard in a ramekin alongside.</li>
+              <li class="method-step">Serve immediately. Replenish jelly as it gets scooped up.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Spiced Whole Grain Mustard — board mustard</span>
+              <span class="cross-pill">Cleo's Kiss Blend — board dukkah</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-accent accent-core"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Main · 25 minutes</div>
+          <div class="recipe-name">Pepper Jelly Glazed Salmon</div>
+          <div class="serves-row"><span class="serves-badge">Serves 4</span><span class="time-badge">25 min</span></div>
+          <div class="recipe-desc">Pepper jelly on fish is a Southern classic that translates perfectly here. The heat of the jelly blooms as it caramelizes, the sweet rounds it out. Pair with Friday Fish Blend on the fish and Blood Orange Marmalade thinned for the glaze for a double-product serve.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Hot Pepper Jelly</span><span class="ing-amount">3 tbsp</span></li>
+              <li class="ing-hero"><span class="ing-name">Friday Fish Blend</span><span class="ing-amount">1 tsp</span></li>
+              <li><span class="ing-name">Salmon fillets</span><span class="ing-amount">4 × 5 oz</span></li>
+              <li><span class="ing-name">Soy sauce</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Fresh ginger, grated</span><span class="ing-amount">1 tsp</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Preheat oven to 400°F. Season salmon with Friday Fish Blend.</li>
+              <li class="method-step">Whisk Hot Pepper Jelly, soy sauce, and ginger for glaze.</li>
+              <li class="method-step">Place salmon on lined baking sheet. Brush half the glaze over each fillet.</li>
+              <li class="method-step">Roast 12–14 min. Brush remaining glaze in final 3 min. Serve immediately.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Friday Fish Blend — seasoning base</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DR. PEPPER BBQ SAUCE -->
+  <div class="product-block">
+    <div class="prod-hdr core"><span class="prod-badge badge-core">Core Product</span><span class="prod-name">Dr. Pepper BBQ Sauce</span><span class="prod-meta">8 oz · $10</span></div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-core"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Main · 4 hours</div>
+          <div class="recipe-name">BBQ Pulled Chicken Sandwiches</div>
+          <div class="serves-row"><span class="serves-badge">Serves 6</span><span class="time-badge">4 hrs</span></div>
+          <div class="recipe-desc">Dr. Pepper gives the sauce a deep molasses-and-cherry note that's unlike any commercial BBQ sauce. It caramelizes beautifully on chicken. Chuckwagon Brisket Blend as the rub doubles down on the smoke and pepper profile.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Dr. Pepper BBQ Sauce</span><span class="ing-amount">½ cup</span></li>
+              <li class="ing-hero"><span class="ing-name">Chuckwagon Brisket Blend</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Bone-in chicken breasts or thighs</span><span class="ing-amount">3 lbs</span></li>
+              <li><span class="ing-name">Chicken broth</span><span class="ing-amount">1 cup</span></li>
+              <li><span class="ing-name">Brioche buns</span><span class="ing-amount">6</span></li>
+              <li><span class="ing-name">Bread & Butter Pickles — top</span><span class="ing-amount">¼ cup</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Season chicken with Chuckwagon blend. Sear in oil until browned.</li>
+              <li class="method-step">Add broth and ⅓ cup BBQ sauce to slow cooker or Dutch oven. Cook on low 3–4 hours until pull-apart.</li>
+              <li class="method-step">Shred chicken. Toss with remaining BBQ sauce.</li>
+              <li class="method-step">Pile on toasted brioche. Top with Bread & Butter Pickles.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Chuckwagon Brisket Blend — rub</span>
+              <span class="cross-pill">Bread & Butter Pickles — sandwich topping</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-accent accent-core"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Flatbread · 20 minutes</div>
+          <div class="recipe-name">BBQ Bacon Flatbread</div>
+          <div class="serves-row"><span class="serves-badge">Serves 4</span><span class="time-badge">20 min</span></div>
+          <div class="recipe-desc">Dr. Pepper BBQ Sauce as the pizza sauce is the swap that redefines flatbread night. The sweetness of the sauce caramelizes at high heat. Top with Bread & Butter Pickles after baking — hot flatbread, cold pickles, the contrast is everything.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Dr. Pepper BBQ Sauce</span><span class="ing-amount">3 tbsp</span></li>
+              <li><span class="ing-name">Flatbread or pizza dough</span><span class="ing-amount">2 pieces</span></li>
+              <li><span class="ing-name">Mozzarella, shredded</span><span class="ing-amount">1 cup</span></li>
+              <li><span class="ing-name">Bacon, cooked and crumbled</span><span class="ing-amount">4 strips</span></li>
+              <li><span class="ing-name">Red onion, thin sliced</span><span class="ing-amount">¼ cup</span></li>
+              <li><span class="ing-name">Bread & Butter Pickles — finish</span><span class="ing-amount">¼ cup</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Spread BBQ sauce on flatbread. Top with mozzarella, bacon, and red onion.</li>
+              <li class="method-step">Bake at 450°F for 10–12 min until cheese is bubbling and edges are crisp.</li>
+              <li class="method-step">Remove from oven. Immediately scatter Bread & Butter Pickles over the top.</li>
+              <li class="method-step">Slice and serve — the cold pickles against the hot flatbread is the signature of this dish.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Bread & Butter Pickles — cold finish</span>
+              <span class="cross-pill">Garlic Dill Pickle — table side</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPICED WHOLE GRAIN MUSTARD -->
+  <div class="product-block">
+    <div class="prod-hdr core"><span class="prod-badge badge-core">Core Product</span><span class="prod-name">Spiced Whole Grain Mustard</span><span class="prod-meta">4 oz · $7</span></div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-core"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Dressing · 5 minutes</div>
+          <div class="recipe-name">Whole Grain Mustard Vinaigrette</div>
+          <div class="serves-row"><span class="serves-badge">Makes ½ cup</span><span class="time-badge">5 min</span></div>
+          <div class="recipe-desc">The mustard is the emulsifier — it holds the dressing together without any dairy or egg. Honey & Vine Brine as the acid adds floral honey depth that plain vinegar can't. The best use of two Yes We Can! products in 5 minutes.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Spiced Whole Grain Mustard</span><span class="ing-amount">1 tbsp</span></li>
+              <li class="ing-hero"><span class="ing-name">Honey & Vine Brine</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Good olive oil</span><span class="ing-amount">¼ cup</span></li>
+              <li><span class="ing-name">Shallot, minced</span><span class="ing-amount">1 small</span></li>
+              <li><span class="ing-name">Salt and pepper</span><span class="ing-amount">to taste</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Whisk mustard, Honey & Vine Brine, and shallot in a small bowl.</li>
+              <li class="method-step">Stream in olive oil whisking continuously until emulsified.</li>
+              <li class="method-step">Season with salt and pepper. Dress greens immediately or store refrigerated up to 5 days.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Honey & Vine Brine — acid base</span>
+              <span class="cross-pill">Salt & Vine Brine — alternate acid</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-accent accent-core"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Main · 35 minutes</div>
+          <div class="recipe-name">Mustard-Crusted Pork Tenderloin</div>
+          <div class="serves-row"><span class="serves-badge">Serves 4</span><span class="time-badge">35 min</span></div>
+          <div class="recipe-desc">Whole grain mustard roasted on pork is a classic for good reason — the seeds bloom and crunch, the spices carry the warm cinnamon and ginger notes that make this mustard different. Serve alongside Garlic Dill Pickle to cut through the richness.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Spiced Whole Grain Mustard</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Pork tenderloin</span><span class="ing-amount">1½ lbs</span></li>
+              <li><span class="ing-name">Fresh rosemary and thyme</span><span class="ing-amount">2 sprigs each</span></li>
+              <li><span class="ing-name">Olive oil</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Garlic Dill Pickle — serve alongside</span><span class="ing-amount">4 spears</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Preheat oven to 425°F. Season pork with salt and pepper. Sear in oven-safe pan over high heat, 2 min per side.</li>
+              <li class="method-step">Off heat, brush mustard generously over all surfaces. Press rosemary and thyme onto mustard.</li>
+              <li class="method-step">Roast 18–22 min until internal temp reaches 145°F. Rest 5 min.</li>
+              <li class="method-step">Slice medallions. Serve with Garlic Dill Pickle spears alongside.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Garlic Dill Pickle — alongside</span>
+              <span class="cross-pill">Friday Fish Blend — alternate protein use</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PICKLED HOT HONEY CARROTS -->
+  <div class="product-block">
+    <div class="prod-hdr core"><span class="prod-badge badge-core">Core Product</span><span class="prod-name">Pickled Hot Honey Carrots</span><span class="prod-meta">16 oz · $11</span></div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-core"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Board · 10 minutes</div>
+          <div class="recipe-name">Hot Honey Carrot & Feta Board</div>
+          <div class="serves-row"><span class="serves-badge">Serves 4–6</span><span class="time-badge">10 min</span></div>
+          <div class="recipe-desc">The Pickled Hot Honey Carrots are the centerpiece — their color and gloss command the board. Cleo's Kiss sprinkled over feta is the flavor bridge, from NH honey to Egyptian-inspired spice.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Pickled Hot Honey Carrots</span><span class="ing-amount">½ cup</span></li>
+              <li class="ing-hero"><span class="ing-name">Cleo's Kiss Blend</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Block feta cheese</span><span class="ing-amount">4 oz</span></li>
+              <li><span class="ing-name">Good olive oil</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Hot Pepper Jelly</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Pita or flatbread</span><span class="ing-amount">to serve</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Place feta block in center of board. Drizzle olive oil over it, press Cleo's Kiss blend on top.</li>
+              <li class="method-step">Arrange Pickled Hot Honey Carrots alongside the feta as the anchor.</li>
+              <li class="method-step">Add Hot Pepper Jelly in a small ramekin for dipping.</li>
+              <li class="method-step">Serve with warm pita or flatbread and olive oil on the side for the Cleo's Kiss dipping experience.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Cleo's Kiss Blend — feta topping</span>
+              <span class="cross-pill">Hot Pepper Jelly — dipping ramekin</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-accent accent-core"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Bowl · 30 minutes</div>
+          <div class="recipe-name">Roasted Carrot & Pickle Grain Bowl</div>
+          <div class="serves-row"><span class="serves-badge">Serves 2</span><span class="time-badge">30 min</span></div>
+          <div class="recipe-desc">The full Yes We Can! carrot story — roasted fresh carrots glazed with Honey & Vine Brine, served alongside the Pickled Hot Honey Carrots. Hot and cold, glazed and brined, on one plate. Cleo's Kiss as the finishing crunch ties it together.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Pickled Hot Honey Carrots</span><span class="ing-amount">½ cup</span></li>
+              <li class="ing-hero"><span class="ing-name">Honey & Vine Brine</span><span class="ing-amount">2 tbsp</span></li>
+              <li class="ing-hero"><span class="ing-name">Cleo's Kiss Blend</span><span class="ing-amount">1 tsp</span></li>
+              <li><span class="ing-name">Fresh carrots, halved lengthwise</span><span class="ing-amount">½ lb</span></li>
+              <li><span class="ing-name">Cooked farro, quinoa, or rice</span><span class="ing-amount">2 cups</span></li>
+              <li><span class="ing-name">Greek yogurt or tahini</span><span class="ing-amount">¼ cup</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Roast fresh carrots at 425°F with olive oil for 20 min. Brush Honey & Vine Brine over carrots. Roast 8 more minutes until glazed.</li>
+              <li class="method-step">Build bowl: grain base, dollop of yogurt or tahini, roasted carrots.</li>
+              <li class="method-step">Add Pickled Hot Honey Carrots alongside the roasted ones — cold against hot.</li>
+              <li class="method-step">Sprinkle Cleo's Kiss blend over the top. Drizzle any remaining glaze over the bowl.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Honey & Vine Brine — glaze</span>
+              <span class="cross-pill">Cleo's Kiss Blend — finishing crunch</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════
+     COMING SOON
+═══════════════════════════════════════════════════════════ -->
+<div id="section-soon" class="section">
+  <div class="section-intro soon">
+    <p><strong>Coming to shelves this fall.</strong> Apple Bourbon Jam, Pineapple &amp; Apple Chutney, Christmas Pickle, Salt &amp; Vine Brine, and Honey &amp; Vine Brine are on their way. Get on the list at yeswecanpickle.com to be first to know when they're available.</p>
+  </div>
+
+  <!-- APPLE BOURBON JAM -->
+  <div class="product-block">
+    <div class="prod-hdr soon"><span class="prod-badge badge-soon">Coming Q4</span><span class="prod-name">Apple Bourbon Jam</span><span class="prod-meta">8 oz · $10</span></div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-soon"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Appetizer · 10 minutes</div>
+          <div class="recipe-name">Brie & Apple Bourbon Jam Crostini</div>
+          <div class="serves-row"><span class="serves-badge">Serves 6–8</span><span class="time-badge">10 min</span></div>
+          <div class="recipe-desc">Apple, bourbon, and brie is one of the great autumn flavor combinations. The jam does the work — all you need is a crostini and a good piece of cheese. Spiced Whole Grain Mustard on the back side of the bread is the secret layer.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Apple Bourbon Jam</span><span class="ing-amount">¼ cup</span></li>
+              <li class="ing-hero"><span class="ing-name">Spiced Whole Grain Mustard</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Brie cheese, sliced</span><span class="ing-amount">4 oz</span></li>
+              <li><span class="ing-name">Baguette or crostini, toasted</span><span class="ing-amount">16 slices</span></li>
+              <li><span class="ing-name">Fresh thyme</span><span class="ing-amount">garnish</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Toast baguette slices until golden. While warm, spread a thin layer of Spiced Whole Grain Mustard on each.</li>
+              <li class="method-step">Top with a slice of brie.</li>
+              <li class="method-step">Spoon Apple Bourbon Jam generously over brie.</li>
+              <li class="method-step">Garnish with fresh thyme. Serve immediately while cheese is just starting to soften from the warm bread.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Spiced Whole Grain Mustard — bread base</span>
+              <span class="cross-pill">Christmas Pickle — board contrast</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-accent accent-soon"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Main · 35 minutes</div>
+          <div class="recipe-name">Apple Bourbon Glazed Pork Chops</div>
+          <div class="serves-row"><span class="serves-badge">Serves 4</span><span class="time-badge">35 min</span></div>
+          <div class="recipe-desc">The bourbon in the jam caramelizes at high heat to create a glaze that rivals a proper restaurant reduction — in one jar. Chuckwagon Brisket Blend as the dry rub underneath adds smoke and heat that makes the sweet glaze land perfectly.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Apple Bourbon Jam</span><span class="ing-amount">3 tbsp</span></li>
+              <li class="ing-hero"><span class="ing-name">Chuckwagon Brisket Blend</span><span class="ing-amount">1 tsp</span></li>
+              <li><span class="ing-name">Thick-cut bone-in pork chops</span><span class="ing-amount">4</span></li>
+              <li><span class="ing-name">Olive oil</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Apple cider vinegar</span><span class="ing-amount">1 tbsp</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Season pork chops with Chuckwagon blend. Sear in oil in cast iron over high heat, 3 min per side until deeply golden.</li>
+              <li class="method-step">Reduce heat to medium. Mix Apple Bourbon Jam and cider vinegar. Spoon over chops.</li>
+              <li class="method-step">Finish in 375°F oven 8–10 min until 145°F internal. Baste with pan glaze once more.</li>
+              <li class="method-step">Rest 5 min. Serve with any remaining pan glaze spooned over.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Chuckwagon Brisket Blend — rub</span>
+              <span class="cross-pill">Christmas Pickle — table contrast</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PINEAPPLE & APPLE CHUTNEY -->
+  <div class="product-block">
+    <div class="prod-hdr soon"><span class="prod-badge badge-soon">Coming Q4</span><span class="prod-name">Pineapple & Apple Chutney</span><span class="prod-meta">8 oz · $12</span></div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-soon"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Main · 40 minutes</div>
+          <div class="recipe-name">Pork Tenderloin with Pineapple Chutney</div>
+          <div class="serves-row"><span class="serves-badge">Serves 4</span><span class="time-badge">40 min</span></div>
+          <div class="recipe-desc">Pork and chutney is the definitive pairing for this product — the acidity cuts the fat, the pineapple brings brightness, the warm spice echoes Martinique Blend. Use the blend as the rub and the chutney as the table sauce for a complete two-product story.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Pineapple & Apple Chutney</span><span class="ing-amount">¼ cup + table</span></li>
+              <li class="ing-hero"><span class="ing-name">Martinique Blend</span><span class="ing-amount">1½ tsp</span></li>
+              <li><span class="ing-name">Pork tenderloin</span><span class="ing-amount">1½ lbs</span></li>
+              <li><span class="ing-name">Olive oil</span><span class="ing-amount">1 tbsp</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Rub pork with Martinique blend. Sear all sides in oil until golden.</li>
+              <li class="method-step">Spread 2 tbsp chutney over tenderloin. Roast at 425°F for 20–22 min until 145°F internal.</li>
+              <li class="method-step">Rest 5 min. Slice and serve with remaining chutney alongside as the table sauce.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Martinique Blend — rub</span>
+              <span class="cross-pill">Spiced Whole Grain Mustard — board mustard</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-accent accent-soon"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Board · 15 minutes</div>
+          <div class="recipe-name">Chutney & Aged Cheddar Board</div>
+          <div class="serves-row"><span class="serves-badge">Serves 6</span><span class="time-badge">15 min</span></div>
+          <div class="recipe-desc">Chutney and aged cheddar is a British classic that translates immediately to the New England palate. The pineapple brightness cuts through sharp cheddar beautifully. Spiced Whole Grain Mustard alongside keeps the board complete.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Pineapple & Apple Chutney</span><span class="ing-amount">⅓ cup</span></li>
+              <li class="ing-hero"><span class="ing-name">Spiced Whole Grain Mustard</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Aged sharp cheddar</span><span class="ing-amount">4 oz</span></li>
+              <li><span class="ing-name">Gruyère or manchego</span><span class="ing-amount">4 oz</span></li>
+              <li><span class="ing-name">Crackers, sliced baguette</span><span class="ing-amount">to fill</span></li>
+              <li><span class="ing-name">Christmas Pickle — contrast</span><span class="ing-amount">4 spears</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Place chutney and mustard in separate ramekins as anchor points of the board.</li>
+              <li class="method-step">Slice cheeses in thick wedges and shards. Arrange in two clusters.</li>
+              <li class="method-step">Add Christmas Pickle spears for color and crunch contrast.</li>
+              <li class="method-step">Fill with crackers and bread. The pairing instruction: aged cheddar + chutney + crackers.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Spiced Whole Grain Mustard — alongside</span>
+              <span class="cross-pill">Christmas Pickle — color &amp; crunch</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHRISTMAS PICKLE -->
+  <div class="product-block">
+    <div class="prod-hdr soon"><span class="prod-badge badge-soon">Coming Q4</span><span class="prod-name">Christmas Pickle</span><span class="prod-meta">16 oz · $11</span></div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent accent-soon"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Board · 20 minutes</div>
+          <div class="recipe-name">Holiday Charcuterie Board</div>
+          <div class="serves-row"><span class="serves-badge">Serves 10–12</span><span class="time-badge">20 min</span></div>
+          <div class="recipe-desc">The Christmas Pickle anchors the holiday board — its spiced brine gives it a warm depth that a standard dill can't match. Apple Bourbon Jam brings the sweet, Pineapple Chutney the tangy, Spiced Whole Grain Mustard the savory. All four Yes We Can! Q4 products on one board.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Christmas Pickle</span><span class="ing-amount">6–8 spears</span></li>
+              <li class="ing-hero"><span class="ing-name">Apple Bourbon Jam</span><span class="ing-amount">3 tbsp</span></li>
+              <li class="ing-hero"><span class="ing-name">Pineapple & Apple Chutney</span><span class="ing-amount">3 tbsp</span></li>
+              <li class="ing-hero"><span class="ing-name">Spiced Whole Grain Mustard</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Prosciutto, salami, smoked turkey</span><span class="ing-amount">10 oz</span></li>
+              <li><span class="ing-name">Brie, aged cheddar, gouda</span><span class="ing-amount">12 oz</span></li>
+              <li><span class="ing-name">Crackers, grapes, dried apricots</span><span class="ing-amount">to fill</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Place all four Yes We Can! products in ramekins first — they are the anchors of the board. Space them evenly.</li>
+              <li class="method-step">Add cheese in clusters between the ramekins.</li>
+              <li class="method-step">Fold and drape charcuterie in ribbons between cheese clusters.</li>
+              <li class="method-step">Tuck Christmas Pickle spears alongside meats. Fill remaining space with crackers, grapes, and apricots.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Apple Bourbon Jam — sweet</span>
+              <span class="cross-pill">Pineapple & Apple Chutney — tangy</span>
+              <span class="cross-pill">Spiced Whole Grain Mustard — savory</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-accent accent-soon"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Cocktail · 5 minutes</div>
+          <div class="recipe-name">Christmas Pickle Bloody Mary</div>
+          <div class="serves-row"><span class="serves-badge">Serves 1</span><span class="time-badge">5 min</span></div>
+          <div class="recipe-desc">Pickle brine in a Bloody Mary is the standard. Christmas Pickle brine — with its warm spiced notes — elevates it to something genuinely seasonal. The spear as the garnish is the finishing touch.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Christmas Pickle brine</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Vodka</span><span class="ing-amount">1.5 oz</span></li>
+              <li><span class="ing-name">Tomato juice</span><span class="ing-amount">4 oz</span></li>
+              <li><span class="ing-name">Lemon juice</span><span class="ing-amount">½ oz</span></li>
+              <li><span class="ing-name">Hot sauce, Worcestershire</span><span class="ing-amount">dash each</span></li>
+              <li><span class="ing-name">Christmas Pickle spear — garnish</span><span class="ing-amount">1</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Combine pickle brine, vodka, tomato juice, lemon juice, hot sauce, and Worcestershire in a shaker with ice.</li>
+              <li class="method-step">Shake gently — don't over-dilute.</li>
+              <li class="method-step">Pour into a tall glass over fresh ice.</li>
+              <li class="method-step">Garnish with Christmas Pickle spear. The spice in the brine will continue seasoning the drink as you sip.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Spiced Whole Grain Mustard — celery salt rim option</span>
+              <span class="cross-pill">Salt & Vine Brine — alternate brine base</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SALT & VINE BRINE -->
+  <div class="product-block">
+    <div class="prod-hdr soon"><span class="prod-badge badge-soon">Coming Q4</span><span class="prod-name">Salt & Vine Brine</span><span class="prod-meta">8 oz · $9</span></div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent" style="background:var(--shrub);"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Dressing · 5 minutes</div>
+          <div class="recipe-name">Salt & Vine Vinaigrette</div>
+          <div class="serves-row"><span class="serves-badge">Makes ½ cup</span><span class="time-badge">5 min</span></div>
+          <div class="recipe-desc">Four ingredients in the brine — four ingredients in the dressing. The salt is already balanced, the acid is already there. Spiced Whole Grain Mustard as the emulsifier is the only addition that matters. Four ingredients in the brine, four in the dressing — it practically makes itself.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Salt & Vine Brine</span><span class="ing-amount">3 tbsp</span></li>
+              <li class="ing-hero"><span class="ing-name">Spiced Whole Grain Mustard</span><span class="ing-amount">1 tsp</span></li>
+              <li><span class="ing-name">Good olive oil</span><span class="ing-amount">¼ cup</span></li>
+              <li><span class="ing-name">Honey (optional)</span><span class="ing-amount">1 tsp</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Combine brine and mustard in a small jar or bowl. Whisk or shake to combine.</li>
+              <li class="method-step">Stream in olive oil while whisking to emulsify. Add honey if you want balance.</li>
+              <li class="method-step">Taste — adjust with more brine for acid, more oil for richness.</li>
+              <li class="method-step">Use immediately on greens or store refrigerated up to 1 week. Shake before each use.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Spiced Whole Grain Mustard — emulsifier</span>
+              <span class="cross-pill">Honey & Vine Brine — sweeter alternate</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-accent" style="background:var(--shrub);"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Cocktails & Shrubs · 5 min + 48 hr steep</div>
+          <div class="recipe-name">Salt & Vine Seasonal Shrubs</div>
+          <div class="serves-row"><span class="serves-badge">Makes 1 cup shrub</span><span class="time-badge">5 min + 48 hrs</span></div>
+          <div class="recipe-desc">The brine is your base — you choose the fruit. Add cranberries for a holiday shrub, strawberries for spring, peaches for summer. The cocktail builds itself: 2 tbsp shrub, your spirit of choice, sparkling water.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Salt & Vine Brine</span><span class="ing-amount">1 cup</span></li>
+              <li><span class="ing-name">Fresh fruit of choice (see below)</span><span class="ing-amount">½ cup</span></li>
+              <li><span class="ing-name">Sparkling water — to serve</span><span class="ing-amount">4–5 oz</span></li>
+              <li><span class="ing-name">Spirits of choice — optional</span><span class="ing-amount">1.5 oz</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Choose your fruit: cranberries + orange zest (holiday) · strawberries (spring) · peaches (summer) · apple + cinnamon (fall).</li>
+              <li class="method-step">Combine brine and fruit in a jar. Seal. Refrigerate 48 hours.</li>
+              <li class="method-step">Strain through a fine mesh sieve. Discard solids.</li>
+              <li class="method-step">Serve: 2 tbsp shrub over ice, top with sparkling water. Or add 1.5 oz gin, bourbon, or vodka. Garnish with fresh fruit.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Honey & Vine Brine — sweeter version side by side</span>
+              <span class="cross-pill">Garlic Dill Pickle — brine origin story</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HONEY & VINE BRINE -->
+  <div class="product-block">
+    <div class="prod-hdr soon"><span class="prod-badge badge-soon">Coming Q4</span><span class="prod-name">Honey & Vine Brine</span><span class="prod-meta">8 oz · $10</span></div>
+    <div class="recipe-grid">
+      <div class="recipe-card">
+        <div class="recipe-accent" style="background:var(--amber);"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Cocktail · 5 minutes</div>
+          <div class="recipe-name">Honey & Vine Old Fashioned</div>
+          <div class="serves-row"><span class="serves-badge">Serves 1</span><span class="time-badge">5 min</span></div>
+          <div class="recipe-desc">The brine replaces the sugar cube — NH honey carries the sweetness and floral complexity that simple syrup can't. ACV lifts the bourbon the way bitters do. One jar does the work of three cocktail ingredients.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Honey & Vine Brine</span><span class="ing-amount">2 tbsp</span></li>
+              <li><span class="ing-name">Bourbon (2 oz)</span><span class="ing-amount">2 oz</span></li>
+              <li><span class="ing-name">Aromatic bitters</span><span class="ing-amount">2 dashes</span></li>
+              <li><span class="ing-name">Large ice cube</span><span class="ing-amount">1</span></li>
+              <li><span class="ing-name">Orange peel — express and drop</span><span class="ing-amount">1 strip</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Add Honey & Vine Brine and bitters to a mixing glass with ice. Stir 10 seconds.</li>
+              <li class="method-step">Add bourbon. Stir 15 more seconds — you want dilution, just not too much.</li>
+              <li class="method-step">Strain over a large ice cube in a rocks glass.</li>
+              <li class="method-step">Express orange peel over the surface, run around the rim, drop in. Serve immediately.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Salt & Vine Brine — side-by-side tasting</span>
+              <span class="cross-pill">Pickled Hot Honey Carrots — NH honey story</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="recipe-card">
+        <div class="recipe-accent" style="background:var(--amber);"></div>
+        <div class="recipe-body">
+          <div class="recipe-type">Sauce / Glaze · 10 minutes</div>
+          <div class="recipe-name">Honey & Vine Mustard Glaze</div>
+          <div class="serves-row"><span class="serves-badge">Makes ¼ cup</span><span class="time-badge">10 min</span></div>
+          <div class="recipe-desc">Two Yes We Can! products, one sauce. Honey & Vine Brine and Spiced Whole Grain Mustard together make a glaze that works on salmon, chicken, roasted carrots, or as a dipping sauce alongside a board.</div>
+          <div class="ing-section"><div class="ing-label">Ingredients</div>
+            <ul class="ing-list">
+              <li class="ing-hero"><span class="ing-name">Honey & Vine Brine</span><span class="ing-amount">3 tbsp</span></li>
+              <li class="ing-hero"><span class="ing-name">Spiced Whole Grain Mustard</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Butter (for pan sauce version)</span><span class="ing-amount">1 tbsp</span></li>
+              <li><span class="ing-name">Protein of choice — salmon, chicken, pork, carrots</span><span class="ing-amount">as needed</span></li>
+            </ul>
+          </div>
+          <div class="method-section"><div class="method-label">Method</div>
+            <ol class="method-steps">
+              <li class="method-step">Whisk Honey & Vine Brine and Spiced Whole Grain Mustard together.</li>
+              <li class="method-step">For a glaze: brush over protein in the final 5 minutes of cooking. The honey caramelizes, the mustard blooms.</li>
+              <li class="method-step">For a pan sauce: after searing protein, deglaze the pan with the mixture. Add butter and swirl to emulsify. Spoon over plated protein.</li>
+              <li class="method-step">For a board drizzle: serve as-is in a small ramekin for dipping cheese or bread.</li>
+              </ol>
+            </div>
+          </div>
+          <div class="cross-promo"><div class="cross-label">Yes We Can! Pairings</div>
+            <div class="cross-items">
+              <span class="cross-pill">Spiced Whole Grain Mustard — the glaze partner</span>
+              <span class="cross-pill">Pickled Hot Honey Carrots — serve alongside roasted carrots</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<script>
+function showSection(id, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    t.classList.remove('active-spice','active-core','active-soon');
+  });
+  btn.classList.add('active-' + id);
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>
