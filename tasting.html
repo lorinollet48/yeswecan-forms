@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Yes We Can! — Fall Preview Tasting</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Barlow:wght@400;500&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:#FAF6EF;color:#201810;font-family:'Barlow',sans-serif;min-height:100vh;padding-bottom:40px;}
+
+.hdr{background:#2A4A2E;padding:20px 20px 16px;position:relative;}
+.hdr h1{font-family:'Playfair Display',serif;font-size:1.5rem;color:#fff;line-height:1.2;margin-bottom:4px;}
+.hdr p{font-size:.8rem;color:#9FCC88;line-height:1.4;}
+.hdr .logo-txt{position:absolute;top:18px;right:16px;font-family:'Barlow Condensed',sans-serif;font-size:.65rem;letter-spacing:.12em;color:rgba(255,255,255,.4);text-align:right;text-transform:uppercase;}
+
+.intro{background:#fff;border-bottom:1px solid #E8DECE;padding:14px 20px;}
+.intro p{font-size:.85rem;color:#6B5C48;line-height:1.6;}
+
+.section{background:#fff;border-bottom:1px solid #E8DECE;padding:16px 20px;}
+.section:last-of-type{border-bottom:none;}
+
+.prod-label{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:4px 12px;border-radius:20px;margin-bottom:12px;}
+.prod-label.jam    {background:#FBEAF0;color:#4B1528;border:1px solid #D4537E;}
+.prod-label.pickle {background:#E1F5EE;color:#085041;border:1px solid #3B6D11;}
+.prod-label.chutney{background:#FAEEDA;color:#412402;border:1px solid #BA7517;}
+
+.prod-meta{font-size:.75rem;color:#6B5C48;margin-bottom:14px;font-style:italic;}
+
+.q-label{font-size:.82rem;font-weight:500;color:#201810;margin-bottom:10px;display:block;}
+.q-sub{font-weight:400;color:#6B5C48;}
+
+/* Stars */
+.stars{display:flex;gap:6px;margin-bottom:14px;}
+.star-btn{width:44px;height:44px;border-radius:8px;border:1px solid #D8CCBA;background:#F0E8D8;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#D8CCBA;transition:all .1s;-webkit-appearance:none;}
+.star-btn.lit.jam    {background:#FBEAF0;border-color:#D4537E;color:#D4537E;}
+.star-btn.lit.pickle {background:#E1F5EE;border-color:#3B6D11;color:#3B6D11;}
+.star-btn.lit.chutney{background:#FAEEDA;border-color:#BA7517;color:#BA7517;}
+
+/* Word chips */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px;}
+.chip-btn{font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:600;padding:6px 13px;border-radius:20px;border:1px solid #D8CCBA;background:#F0E8D8;color:#6B5C48;cursor:pointer;transition:all .12s;-webkit-appearance:none;}
+.chip-btn.sel.jam    {background:#FBEAF0;border-color:#D4537E;color:#4B1528;}
+.chip-btn.sel.pickle {background:#E1F5EE;border-color:#3B6D11;color:#085041;}
+.chip-btn.sel.chutney{background:#FAEEDA;border-color:#BA7517;color:#412402;}
+
+/* Inputs */
+textarea,input[type=email]{width:100%;padding:12px 14px;border:1px solid #D8CCBA;border-radius:8px;font-family:'Barlow',sans-serif;font-size:.9rem;color:#201810;background:#F8F4EE;line-height:1.5;-webkit-appearance:none;}
+textarea{min-height:80px;resize:vertical;}
+textarea:focus,input:focus{outline:none;border-color:#3D6B42;}
+
+/* Would you buy */
+.yn-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;}
+.yn-btn{padding:12px 8px;border:1px solid #D8CCBA;border-radius:8px;background:#F0E8D8;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:600;color:#6B5C48;cursor:pointer;text-align:center;transition:all .12s;-webkit-appearance:none;line-height:1.3;}
+.yn-btn.active-yes  {background:#EAF3DE;border-color:#3B6D11;color:#27500A;}
+.yn-btn.active-no   {background:#FCEBEB;border-color:#A32D2D;color:#501313;}
+.yn-btn.active-maybe{background:#FAEEDA;border-color:#BA7517;color:#412402;}
+.yn-btn.active-gift {background:#EAF3DE;border-color:#3B6D11;color:#27500A;}
+
+/* Submit */
+.submit-wrap{padding:20px;background:#2A4A2E;}
+.submit-btn{width:100%;padding:16px;background:#C07B1A;color:#fff;border:none;border-radius:8px;font-family:'Barlow Condensed',sans-serif;font-size:1rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;-webkit-appearance:none;}
+.submit-btn:active{opacity:.85;}
+
+/* Error */
+.err{color:#A32D2D;font-size:.78rem;margin-top:6px;display:none;}
+
+/* Thank you */
+#thankYou{display:none;padding:40px 24px;text-align:center;}
+#thankYou h2{font-family:'Playfair Display',serif;font-size:1.6rem;color:#2A4A2E;margin-bottom:12px;}
+#thankYou p{font-size:.9rem;color:#6B5C48;line-height:1.7;margin-bottom:8px;}
+#thankYou .tagline{font-family:'Playfair Display',serif;font-style:italic;color:#C07B1A;font-size:1rem;margin-top:16px;}
+
+/* Divider between products */
+.prod-divider{border:none;border-top:1px dashed #D8CCBA;margin:20px 0;}
+
+/* Hidden fields for Formspree */
+.hidden{display:none;}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <h1>Fall Preview Tasting</h1>
+  <p>Your feedback shapes what hits the shelf — takes 90 seconds</p>
+  <p style="margin-top:8px;"><a href="https://www.yeswecanpickle.com" style="color:rgba(255,255,255,.45);font-size:.72rem;text-decoration:none;letter-spacing:.04em;">yeswecanpickle.com ↗</a></p>
+  <div class="logo-txt">Yes We Can!<br>Dover, NH</div>
+</header>
+
+<div class="intro">
+  <p>You're trying three products from our fall and holiday lineup — not on shelves yet. Tell us exactly what you think. Honest feedback, good or bad, is what we're here for.</p>
+</div>
+
+<form id="tastingForm" action="https://formspree.io/f/mnjryqjv" method="POST">
+
+  <!-- Hidden fields -->
+  <input type="hidden" name="_next" value="https://www.yeswecanpickle.com">
+  <input type="hidden" name="_subject" value="Yes We Can! Tasting Feedback">
+  <input type="hidden" name="_replyto" id="replyto_field" value="">
+
+  <!-- APPLE BOURBON JAM -->
+  <div class="section">
+    <span class="prod-label jam">Apple Bourbon Jam</span>
+    <p class="prod-meta">Fall · 8 oz · $10 · Apple, bourbon, warm spice</p>
+
+    <span class="q-label">Your rating <span class="q-sub">(tap a star)</span></span>
+    <div class="stars" id="stars-jam">
+      <button type="button" class="star-btn" data-g="jam" data-v="1">★</button>
+      <button type="button" class="star-btn" data-g="jam" data-v="2">★</button>
+      <button type="button" class="star-btn" data-g="jam" data-v="3">★</button>
+      <button type="button" class="star-btn" data-g="jam" data-v="4">★</button>
+      <button type="button" class="star-btn" data-g="jam" data-v="5">★</button>
+    </div>
+    <input type="hidden" name="jam_rating" id="jam_rating" value="0">
+
+    <span class="q-label">What stands out? <span class="q-sub">(pick any)</span></span>
+    <div class="chips" id="chips-jam">
+      <button type="button" class="chip-btn" data-g="jam">Rich &amp; complex</button>
+      <button type="button" class="chip-btn" data-g="jam">Too sweet</button>
+      <button type="button" class="chip-btn" data-g="jam">Not sweet enough</button>
+      <button type="button" class="chip-btn" data-g="jam">Love the bourbon</button>
+      <button type="button" class="chip-btn" data-g="jam">Subtle — want more</button>
+      <button type="button" class="chip-btn" data-g="jam">Perfect on cheese</button>
+      <button type="button" class="chip-btn" data-g="jam">Gift-worthy</button>
+      <button type="button" class="chip-btn" data-g="jam">Would buy today</button>
+    </div>
+    <input type="hidden" name="jam_words" id="jam_words" value="">
+  </div>
+
+  <hr class="prod-divider" style="margin:0;border-top:4px solid #FAF6EF;">
+
+  <!-- CHRISTMAS PICKLE -->
+  <div class="section">
+    <span class="prod-label pickle">Christmas Pickle</span>
+    <p class="prod-meta">Holiday · 16 oz · $11 · Crisp, spiced brine</p>
+
+    <span class="q-label">Your rating <span class="q-sub">(tap a star)</span></span>
+    <div class="stars" id="stars-pickle">
+      <button type="button" class="star-btn" data-g="pickle" data-v="1">★</button>
+      <button type="button" class="star-btn" data-g="pickle" data-v="2">★</button>
+      <button type="button" class="star-btn" data-g="pickle" data-v="3">★</button>
+      <button type="button" class="star-btn" data-g="pickle" data-v="4">★</button>
+      <button type="button" class="star-btn" data-g="pickle" data-v="5">★</button>
+    </div>
+    <input type="hidden" name="pickle_rating" id="pickle_rating" value="0">
+
+    <span class="q-label">What stands out? <span class="q-sub">(pick any)</span></span>
+    <div class="chips" id="chips-pickle">
+      <button type="button" class="chip-btn" data-g="pickle">Classic crunch</button>
+      <button type="button" class="chip-btn" data-g="pickle">Holiday flavors work</button>
+      <button type="button" class="chip-btn" data-g="pickle">Too spiced</button>
+      <button type="button" class="chip-btn" data-g="pickle">More spice please</button>
+      <button type="button" class="chip-btn" data-g="pickle">Perfect for charcuterie</button>
+      <button type="button" class="chip-btn" data-g="pickle">Great gift idea</button>
+      <button type="button" class="chip-btn" data-g="pickle">Would buy today</button>
+    </div>
+    <input type="hidden" name="pickle_words" id="pickle_words" value="">
+  </div>
+
+  <hr class="prod-divider" style="margin:0;border-top:4px solid #FAF6EF;">
+
+  <!-- PINEAPPLE APPLE CHUTNEY -->
+  <div class="section">
+    <span class="prod-label chutney">Pineapple &amp; Apple Chutney</span>
+    <p class="prod-meta">Holiday · 8 oz · $12 · Tangy, sweet, spiced</p>
+
+    <span class="q-label">Your rating <span class="q-sub">(tap a star)</span></span>
+    <div class="stars" id="stars-chutney">
+      <button type="button" class="star-btn" data-g="chutney" data-v="1">★</button>
+      <button type="button" class="star-btn" data-g="chutney" data-v="2">★</button>
+      <button type="button" class="star-btn" data-g="chutney" data-v="3">★</button>
+      <button type="button" class="star-btn" data-g="chutney" data-v="4">★</button>
+      <button type="button" class="star-btn" data-g="chutney" data-v="5">★</button>
+    </div>
+    <input type="hidden" name="chutney_rating" id="chutney_rating" value="0">
+
+    <span class="q-label">What stands out? <span class="q-sub">(pick any)</span></span>
+    <div class="chips" id="chips-chutney">
+      <button type="button" class="chip-btn" data-g="chutney">Unexpected combo — love it</button>
+      <button type="button" class="chip-btn" data-g="chutney">Too tangy</button>
+      <button type="button" class="chip-btn" data-g="chutney">Pairs perfectly with cheese</button>
+      <button type="button" class="chip-btn" data-g="chutney">Needs more spice</button>
+      <button type="button" class="chip-btn" data-g="chutney">Great with pork</button>
+      <button type="button" class="chip-btn" data-g="chutney">Holiday staple</button>
+      <button type="button" class="chip-btn" data-g="chutney">Would buy today</button>
+      <button type="button" class="chip-btn" data-g="chutney">Unique — haven't had this before</button>
+    </div>
+    <input type="hidden" name="chutney_words" id="chutney_words" value="">
+  </div>
+
+  <!-- OPEN QUESTION -->
+  <div class="section">
+    <label class="q-label" for="freetext">Anything else? Pairing ideas, questions, or just what you thought. <span class="q-sub">(optional)</span></label>
+    <textarea name="comments" id="freetext" placeholder="e.g. The apple bourbon jam would be incredible on a biscuit with brie..."></textarea>
+  </div>
+
+  <!-- WOULD YOU BUY -->
+  <div class="section">
+    <span class="q-label">Would you buy any of these when they hit the shelf?</span>
+    <div class="yn-grid">
+      <button type="button" class="yn-btn" data-cls="active-yes"  data-val="Yes — definitely">Yes — definitely</button>
+      <button type="button" class="yn-btn" data-cls="active-gift" data-val="Yes — as a gift">Yes — as a gift</button>
+      <button type="button" class="yn-btn" data-cls="active-maybe" data-val="Maybe — need to try more">Maybe, need more samples</button>
+      <button type="button" class="yn-btn" data-cls="active-no"   data-val="Not for me">Not for me</button>
+    </div>
+    <input type="hidden" name="would_buy" id="would_buy" value="">
+  </div>
+
+  <!-- EMAIL CAPTURE -->
+  <div class="section">
+    <label class="q-label" for="email_input">Want to know when these hit the shelf? <span class="q-sub">(optional — no spam, just a heads-up)</span></label>
+    <input type="email" name="email" id="email_input" placeholder="your@email.com" autocomplete="email">
+    <p class="err" id="emailErr">Please enter a valid email address.</p>
+  </div>
+
+  <!-- SUBMIT -->
+  <div class="submit-wrap">
+    <button type="submit" class="submit-btn">Submit my feedback</button>
+  </div>
+
+</form>
+
+<!-- THANK YOU -->
+<div id="thankYou">
+  <h2>Thank you — genuinely.</h2>
+  <p>Your feedback goes directly to Lori and helps Yes We Can! get these products right before they hit the shelf.</p>
+  <p>If you left your email, we'll be in touch when fall inventory is ready.</p>
+  <p class="tagline">Yes We Can! · Dover, NH · yeswecanpickle.com</p>
+  <div style="margin-top:16px;"><a href="https://www.yeswecanpickle.com" style="font-family:'Barlow',sans-serif;font-size:.82rem;color:#3D6B42;text-decoration:none;border-bottom:1px solid #3D6B42;padding-bottom:1px;">← Back to yeswecanpickle.com</a></div>
+</div>
+
+<script>
+const ratings={jam:0,pickle:0,chutney:0};
+const words={jam:[],pickle:[],chutney:[]};
+
+document.querySelectorAll('.star-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const g=btn.dataset.g; const v=+btn.dataset.v;
+    ratings[g]=v;
+    document.getElementById(g+'_rating').value=v+' / 5 stars';
+    document.querySelectorAll('.star-btn[data-g="'+g+'"]').forEach(s=>{
+      s.classList.toggle('lit',+s.dataset.v<=v);
+      s.classList.toggle(g,+s.dataset.v<=v);
+    });
+  });
+});
+
+document.querySelectorAll('.chip-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const g=btn.dataset.g; const w=btn.textContent.trim();
+    const sel='sel';
+    if(btn.classList.contains(sel)){
+      btn.classList.remove(sel,g);
+      words[g]=words[g].filter(x=>x!==w);
+    } else {
+      btn.classList.add(sel,g);
+      words[g].push(w);
+    }
+    document.getElementById(g+'_words').value=words[g].join(', ');
+  });
+});
+
+document.querySelectorAll('.yn-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.yn-btn').forEach(b=>{
+      b.classList.remove('active-yes','active-no','active-maybe','active-gift');
+    });
+    btn.classList.add(btn.dataset.cls);
+    document.getElementById('would_buy').value=btn.dataset.val;
+  });
+});
+
+document.getElementById('tastingForm').addEventListener('submit',function(e){
+  const emailVal=document.getElementById('email_input').value.trim();
+  const emailErr=document.getElementById('emailErr');
+  if(emailVal && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)){
+    e.preventDefault();
+    emailErr.style.display='block';
+    return;
+  }
+  emailErr.style.display='none';
+  document.getElementById('replyto_field').value=emailVal;
+});
+
+// Formspree redirects to thank-you on success — but handle AJAX fallback
+const form=document.getElementById('tastingForm');
+form.addEventListener('submit',async function(e){
+  if(false) return; // dev mode
+  e.preventDefault();
+  const data=new FormData(form);
+  try{
+    const r=await fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'}});
+    if(r.ok){
+      form.style.display='none';
+      document.querySelector('.hdr').style.display='none';
+      document.querySelector('.intro').style.display='none';
+      document.getElementById('thankYou').style.display='block';
+    }
+  } catch(err){ form.submit(); }
+});
+</script>
+
+</body>
+</html>
