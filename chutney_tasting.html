@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Yes We Can! — Pineapple &amp; Apple Chutney Tasting</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Barlow:wght@400;500&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:#FAF6EF;color:#201810;font-family:'Barlow',sans-serif;min-height:100vh;padding-bottom:48px;}
+
+/* HEADER */
+.hdr{background:#412402;padding:22px 20px 18px;position:relative;overflow:hidden;}
+.hdr::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0,rgba(255,255,255,.03) 1px,transparent 1px,transparent 28px);pointer-events:none;}
+.hdr-inner{position:relative;}
+.hdr-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;}
+.hdr h1{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;line-height:1.2;}
+.hdr h1 em{font-style:italic;color:#FBBF60;}
+.hdr-jar{font-size:28px;flex-shrink:0;margin-top:2px;}
+.hdr-sub{font-size:.78rem;color:#D4A060;line-height:1.5;}
+.event-badge{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,255,255,.12);color:rgba(255,255,255,.7);padding:4px 12px;border-radius:20px;margin-top:8px;}
+
+/* PROGRESS */
+.prog-bar{height:3px;background:rgba(255,255,255,.15);}
+.prog-fill{height:100%;background:#BA7517;transition:width .3s ease;}
+
+/* STEPS */
+.step{display:none;}
+.step.active{display:block;}
+.step-body{padding:20px 20px 4px;}
+.q{font-size:1rem;font-weight:500;color:#201810;margin-bottom:5px;line-height:1.4;}
+.hint{font-size:.78rem;color:#6B5C48;margin-bottom:14px;line-height:1.55;}
+
+/* STAR RATING */
+.star-row{display:flex;justify-content:center;gap:10px;margin-bottom:10px;}
+.star-btn{width:52px;height:52px;border-radius:10px;border:1px solid #D8CCBA;background:#F0E8D8;font-size:26px;cursor:pointer;-webkit-appearance:none;transition:all .12s;display:flex;align-items:center;justify-content:center;color:#D8CCBA;}
+.star-btn.lit{background:#FAEEDA;border-color:#BA7517;color:#BA7517;}
+.star-label{text-align:center;font-size:.8rem;color:#6B5C48;min-height:20px;font-style:italic;margin-bottom:14px;}
+
+/* PILLS */
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+.pill{font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:600;padding:7px 14px;border-radius:20px;border:1px solid #D8CCBA;background:#F0E8D8;color:#6B5C48;cursor:pointer;transition:all .12s;line-height:1;}
+.pill.sel{background:#FAEEDA;border-color:#BA7517;color:#412402;}
+.pill.sel-green{background:#EAF3DE;border-color:#3B6D11;color:#27500A;}
+.pill.sel-pink{background:#FBEAF0;border-color:#D4537E;color:#4B1528;}
+
+/* SCALE */
+.scale-wrap{margin-bottom:8px;}
+.scale-btns{display:flex;justify-content:center;gap:10px;}
+.scale-btn{width:50px;height:50px;border:1px solid #D8CCBA;border-radius:10px;background:#F0E8D8;font-size:1rem;font-weight:500;cursor:pointer;color:#6B5C48;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;transition:all .12s;}
+.scale-btn.lit{background:#FAEEDA;border-color:#BA7517;color:#412402;font-weight:700;}
+.scale-ends{display:flex;justify-content:space-between;font-size:.72rem;color:#6B5C48;padding:0 4px;margin-top:8px;}
+.scale-lbl{text-align:center;font-size:.78rem;color:#6B5C48;min-height:18px;margin-top:8px;font-style:italic;}
+
+/* INPUTS */
+textarea,input[type=email],input[type=text]{width:100%;padding:12px 14px;border:1px solid #D8CCBA;border-radius:8px;font-family:'Barlow',sans-serif;font-size:.9rem;color:#201810;background:#F8F4EE;line-height:1.5;-webkit-appearance:none;margin-bottom:8px;}
+textarea{min-height:80px;resize:vertical;}
+input:focus,textarea:focus{outline:none;border-color:#BA7517;}
+.field-label{font-size:.82rem;font-weight:500;color:#201810;display:block;margin-bottom:6px;}
+.field-sub{font-weight:400;color:#6B5C48;}
+
+/* DIVIDER */
+.divider{height:1px;background:#E8DECE;margin:14px 0 12px;}
+
+/* FOOTER NAV */
+.step-footer{padding:14px 20px 20px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E8DECE;background:#FAF6EF;}
+.step-counter{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;letter-spacing:.06em;color:#6B5C48;text-transform:uppercase;}
+.nav-btn{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:11px 22px;border-radius:8px;cursor:pointer;-webkit-appearance:none;transition:all .12s;}
+.btn-back{background:transparent;border:1px solid #D8CCBA;color:#6B5C48;}
+.btn-next{background:#412402;border:none;color:#fff;}
+.btn-submit{background:#BA7517;border:none;color:#fff;padding:12px 28px;}
+
+/* ERR */
+.err{font-size:.78rem;color:#A32D2D;display:none;margin:-4px 0 8px;}
+
+/* THANK YOU */
+#thankYou{display:none;padding:40px 24px;text-align:center;}
+.ty-icon{font-size:48px;margin-bottom:16px;}
+.ty-h{font-family:'Playfair Display',serif;font-size:1.5rem;color:#412402;margin-bottom:12px;}
+.ty-p{font-size:.88rem;color:#6B5C48;line-height:1.7;margin-bottom:8px;}
+.ty-note{font-style:italic;color:#BA7517;font-size:.85rem;margin-top:6px;}
+.ty-brand{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#6B5C48;margin-top:22px;padding-top:16px;border-top:1px solid #D8CCBA;}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <div class="hdr-row">
+      <h1>Pineapple &amp; Apple<br><em>Chutney Tasting</em></h1>
+      <div class="hdr-jar">🍍</div>
+    </div>
+    <div class="hdr-sub">Yes We Can! &nbsp;·&nbsp; Coming fall 2026 &nbsp;·&nbsp; What do you think?</div>
+    <div class="event-badge">Featured tonight by Seacoast Bites · Lucy</div>
+  </div>
+</header>
+
+<div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+
+<form id="tastingForm" action="https://formspree.io/f/mnjryqjv" method="POST">
+  <input type="hidden" name="_subject" value="Yes We Can! — Pineapple Apple Chutney Tasting">
+  <input type="hidden" name="_next" value="https://www.yeswecanpickle.com">
+  <input type="hidden" name="star_rating" id="star_rating_val" value="">
+  <input type="hidden" name="tried_with" id="tried_with_val" value="">
+  <input type="hidden" name="flavor_words" id="flavor_words_val" value="">
+  <input type="hidden" name="would_buy" id="would_buy_val" value="">
+  <input type="hidden" name="pair_at_home" id="pair_home_val" value="">
+  <input type="hidden" name="recommend_score" id="rec_score_val" value="">
+  <input type="hidden" name="open_comments" id="comments_val" value="">
+
+  <!-- STEP 1: Star rating -->
+  <div id="step1" class="step active">
+    <div class="step-body">
+      <p class="q">How would you rate the Pineapple &amp; Apple Chutney?</p>
+      <p class="hint">Tap a star — be honest. We can take it.</p>
+      <div class="star-row" id="starRow">
+        <button type="button" class="star-btn" data-v="1" onclick="setStar(1)">★</button>
+        <button type="button" class="star-btn" data-v="2" onclick="setStar(2)">★</button>
+        <button type="button" class="star-btn" data-v="3" onclick="setStar(3)">★</button>
+        <button type="button" class="star-btn" data-v="4" onclick="setStar(4)">★</button>
+        <button type="button" class="star-btn" data-v="5" onclick="setStar(5)">★</button>
+      </div>
+      <div class="star-label" id="starLabel"></div>
+    </div>
+    <div class="step-footer">
+      <span class="step-counter">1 of 5</span>
+      <button type="button" class="nav-btn btn-next" onclick="goStep(2)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 2: What did you try it with -->
+  <div id="step2" class="step">
+    <div class="step-body">
+      <p class="q">What did you try it with tonight?</p>
+      <p class="hint">Pick everything that applies.</p>
+      <div class="pill-row" id="tried-pills">
+        <div class="pill" onclick="togglePill(this,'tried','sel-green')">Aged cheddar</div>
+        <div class="pill" onclick="togglePill(this,'tried','sel-green')">Brie</div>
+        <div class="pill" onclick="togglePill(this,'tried','sel-green')">Manchego</div>
+        <div class="pill" onclick="togglePill(this,'tried','sel-green')">Gouda</div>
+        <div class="pill" onclick="togglePill(this,'tried','sel-green')">Blue cheese</div>
+        <div class="pill" onclick="togglePill(this,'tried','sel')">Crackers alone</div>
+        <div class="pill" onclick="togglePill(this,'tried','sel')">Bread</div>
+        <div class="pill" onclick="togglePill(this,'tried','sel-pink')">With meat</div>
+        <div class="pill" onclick="togglePill(this,'tried','sel')">Just a spoonful 🤷</div>
+      </div>
+    </div>
+    <div class="step-footer">
+      <button type="button" class="nav-btn btn-back" onclick="goStep(1)">← Back</button>
+      <span class="step-counter">2 of 5</span>
+      <button type="button" class="nav-btn btn-next" onclick="goStep(3)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 3: Flavor words + would buy -->
+  <div id="step3" class="step">
+    <div class="step-body">
+      <p class="q">What words fit the chutney?</p>
+      <p class="hint">Tap everything that felt right.</p>
+      <div class="pill-row" id="flavor-pills">
+        <div class="pill" onclick="togglePill(this,'flavor','sel')">Sweet</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel')">Tangy</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel')">Spiced</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel')">Tropical</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel')">Complex</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel')">Mild</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel')">Too sweet</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel')">Too tangy</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel')">Needs more spice</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel-green')">Perfectly balanced</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel-green')">Better than expected</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel-pink')">Unexpected — in a good way</div>
+      </div>
+
+      <div class="divider"></div>
+      <p class="q">Would you buy this when it hits the shelf?</p>
+      <div class="pill-row" id="buy-pills">
+        <div class="pill" onclick="selectOne(this,'buy','sel-green')">Yes — immediately</div>
+        <div class="pill" onclick="selectOne(this,'buy','sel-green')">Yes — as a gift</div>
+        <div class="pill" onclick="selectOne(this,'buy','sel')">Maybe — I'd try it again first</div>
+        <div class="pill" onclick="selectOne(this,'buy','sel-pink')">Probably not</div>
+      </div>
+    </div>
+    <div class="step-footer">
+      <button type="button" class="nav-btn btn-back" onclick="goStep(2)">← Back</button>
+      <span class="step-counter">3 of 5</span>
+      <button type="button" class="nav-btn btn-next" onclick="goStep(4)">Next →</button>
+    </div>
+  </div>
+
+  <!-- STEP 4: Home pairing + open comment -->
+  <div id="step4" class="step">
+    <div class="step-body">
+      <p class="q">What would you pair it with at home?</p>
+      <p class="hint">Dream a little. There are no wrong answers.</p>
+      <div class="pill-row" id="pair-pills">
+        <div class="pill" onclick="togglePill(this,'pair','sel-green')">Cheese board</div>
+        <div class="pill" onclick="togglePill(this,'pair','sel-green')">Charcuterie</div>
+        <div class="pill" onclick="togglePill(this,'pair','sel-pink')">Pork tenderloin</div>
+        <div class="pill" onclick="togglePill(this,'pair','sel-pink')">Grilled chicken</div>
+        <div class="pill" onclick="togglePill(this,'pair','sel-pink')">Lamb</div>
+        <div class="pill" onclick="togglePill(this,'pair','sel')">Holiday table</div>
+        <div class="pill" onclick="togglePill(this,'pair','sel')">Thanksgiving</div>
+        <div class="pill" onclick="togglePill(this,'pair','sel')">Sandwich spread</div>
+        <div class="pill" onclick="togglePill(this,'pair','sel')">Gift basket</div>
+      </div>
+
+      <div class="divider"></div>
+      <label class="field-label" for="openComment">Anything else Lori should know? <span class="field-sub">(optional)</span></label>
+      <textarea id="openComment" placeholder="A pairing idea, a note on the flavor, something you'd change — all welcome..."></textarea>
+    </div>
+    <div class="step-footer">
+      <button type="button" class="nav-btn btn-back" onclick="goStep(3)">← Back</button>
+      <span class="step-counter">4 of 5</span>
+      <button type="button" class="nav-btn btn-next" onclick="goStep(5)">Almost done →</button>
+    </div>
+  </div>
+
+  <!-- STEP 5: Email -->
+  <div id="step5" class="step">
+    <div class="step-body">
+      <p class="q">Want to know when this hits the shelf?</p>
+      <p class="hint">Leave your email and you'll be first. No spam — just a heads-up when it's ready.</p>
+      <label class="field-label" for="nameInput">First name <span class="field-sub">(optional)</span></label>
+      <input type="text" id="nameInput" name="first_name" placeholder="Your first name">
+      <label class="field-label" for="emailInput">Email <span class="field-sub">(optional)</span></label>
+      <input type="email" id="emailInput" name="email" placeholder="your@email.com" autocomplete="email">
+      <p class="err" id="emailErr">Please enter a valid email address.</p>
+      <p style="font-size:.72rem;color:#6B5C48;line-height:1.6;margin-top:4px;">Yes We Can! &middot; Dover, NH &middot; yeswecanpickle.com<br>Your info stays with Lori, full stop.</p>
+    </div>
+    <div class="step-footer">
+      <button type="button" class="nav-btn btn-back" onclick="goStep(4)">← Back</button>
+      <span class="step-counter">5 of 5</span>
+      <button type="button" class="nav-btn btn-submit" onclick="submitForm()">✓ Send my feedback</button>
+    </div>
+  </div>
+
+</form>
+
+<!-- THANK YOU -->
+<div id="thankYou">
+  <div class="ty-icon">🍍</div>
+  <p class="ty-h" id="tyName">Thank you — genuinely.</p>
+  <p class="ty-p">Your feedback goes directly to Lori and helps get the Pineapple &amp; Apple Chutney right before it hits the shelf.</p>
+  <p class="ty-note" id="tyNote"></p>
+  <div class="ty-brand">Yes We Can! &middot; Lori Nollet &middot; Dover, NH &middot; yeswecanpickle.com<br>Featured tonight by Seacoast Bites &middot; Lucy</div>
+</div>
+
+<script>
+const TOTAL=5;
+const SEL=['sel','sel-green','sel-pink'];
+
+function goStep(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById('step'+n).classList.add('active');
+  window.scrollTo(0,0);
+  document.getElementById('progFill').style.width=Math.round(((n-1)/TOTAL)*100)+'%';
+}
+
+const starLabels=['','Not quite there','Getting warmer','Solid — liked it','Really good','Absolutely loved it'];
+function setStar(v){
+  document.querySelectorAll('#starRow .star-btn').forEach((b,i)=>b.classList.toggle('lit',i<v));
+  document.getElementById('star_rating_val').value=v+'/5 — '+starLabels[v];
+  document.getElementById('starLabel').textContent=starLabels[v]||'';
+}
+
+function togglePill(el,group,cls){
+  const active=SEL.some(c=>el.classList.contains(c));
+  if(active){el.classList.remove(...SEL);}
+  else{el.classList.add(cls);}
+  updatePillVal(group);
+}
+
+function selectOne(el,group,cls){
+  const parent=el.parentElement;
+  parent.querySelectorAll('.pill').forEach(p=>p.classList.remove(...SEL));
+  el.classList.add(cls);
+  updatePillVal(group);
+}
+
+function updatePillVal(group){
+  const map={tried:'tried_with_val',flavor:'flavor_words_val',buy:'would_buy_val',pair:'pair_home_val'};
+  const fid=map[group];
+  if(!fid)return;
+  const groupId={'tried':'tried-pills','flavor':'flavor-pills','buy':'buy-pills','pair':'pair-pills'}[group];
+  const vals=[];
+  document.querySelectorAll('#'+groupId+' .pill').forEach(p=>{
+    if(SEL.some(c=>p.classList.contains(c)))vals.push(p.textContent.trim());
+  });
+  document.getElementById(fid).value=vals.join(', ');
+}
+
+function submitForm(){
+  const email=document.getElementById('emailInput').value.trim();
+  const name=document.getElementById('nameInput').value.trim();
+  const err=document.getElementById('emailErr');
+  if(email&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    err.style.display='block';return;
+  }
+  err.style.display='none';
+  document.getElementById('comments_val').value=document.getElementById('openComment').value;
+
+  const form=document.getElementById('tastingForm');
+  const rating=document.getElementById('star_rating_val').value;
+  const willBuy=document.getElementById('would_buy_val').value;
+
+  document.getElementById('tyName').textContent=name?'Thank you, '+name+'.':'Thank you — genuinely.';
+  if(willBuy.includes('Yes')){
+    document.getElementById('tyNote').textContent='Noted — we\'ll make sure you\'re first to know when this one lands on the shelf.';
+  }
+
+  const data=new FormData(form);
+  fetch(form.action,{method:'POST',body:data,headers:{'Accept':'application/json'}})
+    .then(()=>{
+      form.style.display='none';
+      document.getElementById('thankYou').style.display='block';
+      document.getElementById('progFill').style.width='100%';
+      window.scrollTo(0,0);
+    })
+    .catch(()=>form.submit());
+}
+</script>
+</body>
+</html>
