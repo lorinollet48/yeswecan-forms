@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Yes We Can! — Mustard Taste Test</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Barlow:wght@400;500&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+body{background:#FAF6EF;color:#201810;font-family:'Barlow',sans-serif;min-height:100vh;padding-bottom:48px;}
+
+.hdr{background:#2A4A2E;padding:22px 20px 18px;position:relative;overflow:hidden;}
+.hdr::before{content:'';position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(255,255,255,.03) 0,rgba(255,255,255,.03) 1px,transparent 1px,transparent 28px);pointer-events:none;}
+.hdr-inner{position:relative;}
+.hdr-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:8px;}
+.hdr h1{font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;line-height:1.2;}
+.hdr h1 em{font-style:italic;color:#9FCC88;}
+.hdr-icon{font-size:28px;flex-shrink:0;margin-top:2px;}
+.hdr-sub{font-size:.78rem;color:#8AB48E;line-height:1.55;}
+.recipe-badge{display:inline-block;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(255,255,255,.13);color:rgba(255,255,255,.75);padding:4px 12px;border-radius:20px;margin-top:8px;}
+
+.prog-bar{height:3px;background:rgba(255,255,255,.15);}
+.prog-fill{height:100%;background:#9FCC88;transition:width .3s ease;}
+
+.step{display:none;}
+.step.active{display:block;}
+.step-body{padding:20px 20px 4px;}
+.q{font-size:1rem;font-weight:500;color:#201810;margin-bottom:5px;line-height:1.4;}
+.hint{font-size:.78rem;color:#6B5C48;margin-bottom:14px;line-height:1.55;}
+
+/* STAR RATING */
+.star-row{display:flex;justify-content:center;gap:10px;margin-bottom:10px;}
+.star-btn{width:52px;height:52px;border-radius:10px;border:1px solid #D8CCBA;background:#F0E8D8;font-size:26px;cursor:pointer;-webkit-appearance:none;transition:all .12s;display:flex;align-items:center;justify-content:center;color:#D8CCBA;}
+.star-btn.lit{background:#EAF3DE;border-color:#3B6D11;color:#3B6D11;}
+.star-label{text-align:center;font-size:.8rem;color:#6B5C48;min-height:20px;font-style:italic;margin-bottom:14px;}
+
+/* PILLS */
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+.pill{font-family:'Barlow Condensed',sans-serif;font-size:.78rem;font-weight:600;padding:7px 14px;border-radius:20px;border:1px solid #D8CCBA;background:#F0E8D8;color:#6B5C48;cursor:pointer;transition:all .12s;line-height:1;}
+.pill.sel       {background:#EAF3DE;border-color:#3B6D11;color:#173404;}
+.pill.sel-amber {background:#FAEEDA;border-color:#BA7517;color:#412402;}
+.pill.sel-red   {background:#FAECE7;border-color:#993C1D;color:#4A1B0C;}
+.pill.sel-blue  {background:#DDE9F6;border-color:#185FA5;color:#0D3B6B;}
+
+/* SCALE */
+.scale-btns{display:flex;justify-content:center;gap:10px;margin-bottom:8px;}
+.scale-btn{width:50px;height:50px;border:1px solid #D8CCBA;border-radius:10px;background:#F0E8D8;font-size:.95rem;font-weight:500;cursor:pointer;color:#6B5C48;display:flex;align-items:center;justify-content:center;-webkit-appearance:none;transition:all .12s;}
+.scale-btn.lit{background:#EAF3DE;border-color:#3B6D11;color:#173404;font-weight:700;}
+.scale-ends{display:flex;justify-content:space-between;font-size:.72rem;color:#6B5C48;padding:0 4px;margin-top:8px;}
+.scale-lbl{text-align:center;font-size:.78rem;color:#6B5C48;min-height:18px;margin-top:8px;font-style:italic;}
+
+/* TEXTURE GRID — key question */
+.texture-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.texture-card{border:1px solid #D8CCBA;border-radius:10px;background:#F0E8D8;padding:12px 10px 10px;cursor:pointer;text-align:center;transition:all .12s;}
+.texture-card.sel{border-color:#3B6D11;background:#EAF3DE;}
+.texture-card .tc-icon{font-size:22px;margin-bottom:4px;}
+.texture-card .tc-lbl{font-size:.78rem;font-weight:500;color:#6B5C48;line-height:1.3;}
+.texture-card .tc-desc{font-size:.7rem;color:#8B7560;margin-top:2px;line-height:1.3;}
+.texture-card.sel .tc-lbl{color:#173404;}
+
+/* DIVIDER */
+.divider{height:1px;background:#E8DECE;margin:14px 0 12px;}
+
+/* INPUTS */
+textarea,input[type=email],input[type=text]{width:100%;padding:12px 14px;border:1px solid #D8CCBA;border-radius:8px;font-family:'Barlow',sans-serif;font-size:.9rem;color:#201810;background:#F8F4EE;line-height:1.5;-webkit-appearance:none;margin-bottom:8px;}
+textarea{min-height:80px;resize:vertical;}
+input:focus,textarea:focus{outline:none;border-color:#3B6D11;}
+.field-label{font-size:.82rem;font-weight:500;color:#201810;display:block;margin-bottom:6px;}
+.field-sub{font-weight:400;color:#6B5C48;}
+
+/* COMPARE BOX */
+.compare-box{background:#F0E8D8;border:1px solid #D8CCBA;border-radius:8px;padding:12px 14px;margin-bottom:12px;}
+.compare-box p{font-size:.8rem;color:#6B5C48;line-height:1.55;}
+.compare-box strong{color:#2A4A2E;}
+
+/* FOOTER NAV */
+.step-footer{padding:14px 20px 20px;display:flex;justify-content:space-between;align-items:center;border-top:1px solid #E8DECE;background:#FAF6EF;}
+.step-counter{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;letter-spacing:.06em;color:#6B5C48;text-transform:uppercase;}
+.nav-btn{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:11px 22px;border-radius:8px;cursor:pointer;-webkit-appearance:none;transition:all .12s;}
+.btn-back{background:transparent;border:1px solid #D8CCBA;color:#6B5C48;}
+.btn-next{background:#2A4A2E;border:none;color:#fff;}
+.btn-submit{background:#3B6D11;border:none;color:#fff;padding:12px 28px;}
+.err{font-size:.78rem;color:#A32D2D;display:none;margin:-4px 0 8px;}
+
+/* THANK YOU */
+#thankYou{display:none;padding:40px 24px;text-align:center;}
+.ty-icon{font-size:48px;margin-bottom:16px;}
+.ty-h{font-family:'Playfair Display',serif;font-size:1.5rem;color:#2A4A2E;margin-bottom:12px;}
+.ty-p{font-size:.88rem;color:#6B5C48;line-height:1.7;margin-bottom:8px;}
+.ty-brand{font-family:'Barlow Condensed',sans-serif;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:#6B5C48;margin-top:22px;padding-top:16px;border-top:1px solid #D8CCBA;}
+</style>
+</head>
+<body>
+
+<header class="hdr">
+  <div class="hdr-inner">
+    <div class="hdr-row">
+      <h1>Spiced Whole Grain<br><em>Mustard Taste Test</em></h1>
+      <div class="hdr-icon">🌿</div>
+    </div>
+    <div class="hdr-sub">Yes We Can! &nbsp;·&nbsp; Revised recipe &nbsp;·&nbsp; Your feedback matters</div>
+    <div class="recipe-badge">Updated Recipe · Pre-Submission Feedback</div>
+  </div>
+</header>
+
+<div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+
+<form id="tastingForm" action="https://formspree.io/f/mnjryqjv" method="POST">
+  <input type="hidden" name="_subject" value="Yes We Can! — Spiced Whole Grain Mustard Taste Test">
+  <input type="hidden" name="star_rating"       id="star_val"       value="">
+  <input type="hidden" name="texture_pick"      id="texture_val"    value="">
+  <input type="hidden" name="texture_compare"   id="compare_val"    value="">
+  <input type="hidden" name="flavor_notes"      id="flavor_val"     value="">
+  <input type="hidden" name="heat_level"        id="heat_val"       value="">
+  <input type="hidden" name="use_case"          id="use_val"        value="">
+  <input type="hidden" name="would_buy"         id="buy_val"        value="">
+  <input type="hidden" name="open_feedback"     id="feedback_val"   value="">
+
+  <!-- ═══════════ STEP 1 — Overall impression ═══════════ -->
+  <div id="step1" class="step active">
+    <div class="step-body">
+      <p class="q">First impression — how does the mustard land overall?</p>
+      <p class="hint">Before we get specific, just go with your gut reaction.</p>
+      <div class="star-row" id="starRow">
+        <button type="button" class="star-btn" onclick="setStar(1)">★</button>
+        <button type="button" class="star-btn" onclick="setStar(2)">★</button>
+        <button type="button" class="star-btn" onclick="setStar(3)">★</button>
+        <button type="button" class="star-btn" onclick="setStar(4)">★</button>
+        <button type="button" class="star-btn" onclick="setStar(5)">★</button>
+      </div>
+      <div class="star-label" id="starLabel"></div>
+    </div>
+    <div class="step-footer">
+      <span class="step-counter">1 of 5</span>
+      <button type="button" class="nav-btn btn-next" onclick="goStep(2)">Next →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ STEP 2 — Texture (the critical question) ═══════════ -->
+  <div id="step2" class="step">
+    <div class="step-body">
+      <p class="q">How would you describe the texture and consistency?</p>
+      <p class="hint">This is the most important question — pick the one that fits best, then tell us more.</p>
+
+      <div class="texture-grid" id="textureGrid">
+        <div class="texture-card" onclick="pickTexture(this,'Too thin — runny')">
+          <div class="tc-icon">💧</div>
+          <div class="tc-lbl">Too thin</div>
+          <div class="tc-desc">Runs off the spoon, hard to control</div>
+        </div>
+        <div class="texture-card" onclick="pickTexture(this,'Slightly thin — pourable but light')">
+          <div class="tc-icon">🫗</div>
+          <div class="tc-lbl">Slightly thin</div>
+          <div class="tc-desc">Pourable, lighter than expected</div>
+        </div>
+        <div class="texture-card" onclick="pickTexture(this,'Just right — spreadable and scoopable')">
+          <div class="tc-icon">✅</div>
+          <div class="tc-lbl">Just right</div>
+          <div class="tc-desc">Spreadable, holds its shape on a knife</div>
+        </div>
+        <div class="texture-card" onclick="pickTexture(this,'Too thick — dense or stiff')">
+          <div class="tc-icon">🧱</div>
+          <div class="tc-lbl">Too thick</div>
+          <div class="tc-desc">Hard to spread, dense or pasty</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+      <p class="q" style="font-size:.9rem;margin-bottom:6px;">How does the texture compare to a store-bought whole grain mustard?</p>
+      <div class="pill-row" id="compare-pills">
+        <div class="pill" onclick="selectOne(this,'compare','sel')">Thinner than store-bought</div>
+        <div class="pill" onclick="selectOne(this,'compare','sel')">About the same</div>
+        <div class="pill" onclick="selectOne(this,'compare','sel')">Thicker than store-bought</div>
+        <div class="pill" onclick="selectOne(this,'compare','sel-amber')">Better than store-bought</div>
+        <div class="pill" onclick="selectOne(this,'compare','sel-red')">I haven't had store-bought to compare</div>
+      </div>
+    </div>
+    <div class="step-footer">
+      <button type="button" class="nav-btn btn-back" onclick="goStep(1)">← Back</button>
+      <span class="step-counter">2 of 5</span>
+      <button type="button" class="nav-btn btn-next" onclick="goStep(3)">Next →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ STEP 3 — Flavor profile ═══════════ -->
+  <div id="step3" class="step">
+    <div class="step-body">
+      <p class="q">What flavors are coming through?</p>
+      <p class="hint">Pick everything that fits. The spice blend is intentional — we want to know if you can taste it.</p>
+      <div class="pill-row" id="flavor-pills">
+        <div class="pill" onclick="togglePill(this,'flavor','sel')">Tangy &amp; bright</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel')">Warm spice</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel')">Slightly sweet</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel-amber')">Hint of ginger</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel-amber')">Hint of cinnamon</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel-amber')">Mustard seed pop</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel-amber')">Mild turmeric note</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel')">Clean &amp; classic</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel-red')">Too vinegary</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel-red')">Spices overpower the mustard</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel-red')">Needs more depth</div>
+        <div class="pill" onclick="togglePill(this,'flavor','sel')">Surprisingly complex</div>
+      </div>
+
+      <div class="divider"></div>
+      <p class="q" style="font-size:.9rem;margin-bottom:6px;">How's the heat level?</p>
+      <div class="pill-row" id="heat-pills">
+        <div class="pill" onclick="selectOne(this,'heat','sel-blue')">Very mild — barely there</div>
+        <div class="pill" onclick="selectOne(this,'heat','sel')">Mild — just a hint</div>
+        <div class="pill" onclick="selectOne(this,'heat','sel-amber')">Medium — pleasant kick</div>
+        <div class="pill" onclick="selectOne(this,'heat','sel-red')">Hot — a lot going on</div>
+        <div class="pill" onclick="selectOne(this,'heat','sel-red')">Too hot</div>
+      </div>
+    </div>
+    <div class="step-footer">
+      <button type="button" class="nav-btn btn-back" onclick="goStep(2)">← Back</button>
+      <span class="step-counter">3 of 5</span>
+      <button type="button" class="nav-btn btn-next" onclick="goStep(4)">Next →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ STEP 4 — Use case + would buy ═══════════ -->
+  <div id="step4" class="step">
+    <div class="step-body">
+      <p class="q">What would you reach for this mustard for?</p>
+      <p class="hint">Pick everything that feels natural.</p>
+      <div class="pill-row" id="use-pills">
+        <div class="pill" onclick="togglePill(this,'use','sel')">Charcuterie board</div>
+        <div class="pill" onclick="togglePill(this,'use','sel')">Sandwiches</div>
+        <div class="pill" onclick="togglePill(this,'use','sel')">Pretzels &amp; dipping</div>
+        <div class="pill" onclick="togglePill(this,'use','sel')">Salad dressing</div>
+        <div class="pill" onclick="togglePill(this,'use','sel-amber')">Glaze for pork or chicken</div>
+        <div class="pill" onclick="togglePill(this,'use','sel-amber')">Mixed into a vinaigrette</div>
+        <div class="pill" onclick="togglePill(this,'use','sel-amber')">Alongside roasted vegetables</div>
+        <div class="pill" onclick="togglePill(this,'use','sel')">Gift basket item</div>
+        <div class="pill" onclick="togglePill(this,'use','sel-red')">Honestly not sure where I'd use it</div>
+      </div>
+
+      <div class="divider"></div>
+      <p class="q" style="font-size:.9rem;margin-bottom:6px;">Would you buy this mustard?</p>
+      <div class="pill-row" id="buy-pills">
+        <div class="pill" onclick="selectOne(this,'buy','sel')">Yes — I'd grab it at the market</div>
+        <div class="pill" onclick="selectOne(this,'buy','sel')">Yes — as a gift</div>
+        <div class="pill" onclick="selectOne(this,'buy','sel-amber')">Maybe — if I tried it again</div>
+        <div class="pill" onclick="selectOne(this,'buy','sel-red')">Probably not</div>
+      </div>
+
+      <div class="divider"></div>
+      <label class="field-label" for="openFeedback">Anything specific Lori should know before this goes back to the lab? <span class="field-sub">(optional)</span></label>
+      <textarea id="openFeedback" placeholder="Texture notes, flavor balance, what you'd tweak, what you loved — anything goes..."></textarea>
+    </div>
+    <div class="step-footer">
+      <button type="button" class="nav-btn btn-back" onclick="goStep(3)">← Back</button>
+      <span class="step-counter">4 of 5</span>
+      <button type="button" class="nav-btn btn-next" onclick="goStep(5)">Almost done →</button>
+    </div>
+  </div>
+
+  <!-- ═══════════ STEP 5 — Name & email ═══════════ -->
+  <div id="step5" class="step">
+    <div class="step-body">
+      <p class="q">Last step — who are we thanking?</p>
+      <p class="hint">Totally optional. If you'd like to know when the mustard officially launches, drop your email.</p>
+      <label class="field-label" for="nameInput">First name <span class="field-sub">(optional)</span></label>
+      <input type="text" id="nameInput" name="first_name" placeholder="Your first name">
+      <label class="field-label" for="emailInput">Email <span class="field-sub">(optional — launch notification only)</span></label>
+      <input type="email" id="emailInput" name="email" placeholder="your@email.com" autocomplete="email">
+      <p class="err" id="emailErr">Please enter a valid email address.</p>
+      <p style="font-size:.72rem;color:#6B5C48;line-height:1.6;margin-top:4px;">Yes We Can! &middot; Dover, NH &middot; yeswecanpickle.com &middot; Your info stays with Lori, full stop.</p>
+    </div>
+    <div class="step-footer">
+      <button type="button" class="nav-btn btn-back" onclick="goStep(4)">← Back</button>
+      <span class="step-counter">5 of 5</span>
+      <button type="button" class="nav-btn btn-submit" onclick="submitForm()">✓ Send my feedback</button>
+    </div>
+  </div>
+
+</form>
+
+<!-- THANK YOU -->
+<div id="thankYou">
+  <div class="ty-icon">🌿</div>
+  <p class="ty-h" id="tyName">Thank you — this genuinely helps.</p>
+  <p class="ty-p">Your feedback on the texture and flavor goes directly into Lori's notes before the Spiced Whole Grain Mustard heads back to the UMaine Orono lab for review. You're part of getting it right.</p>
+  <div class="ty-brand">Yes We Can! &middot; Lori Nollet &middot; Dover, NH &middot; yeswecanpickle.com</div>
+</div>
+
+<script>
+const TOTAL = 5;
+const SEL = ['sel','sel-amber','sel-red','sel-blue'];
+
+function goStep(n) {
+  document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+  document.getElementById('step'+n).classList.add('active');
+  window.scrollTo(0,0);
+  document.getElementById('progFill').style.width = Math.round(((n-1)/TOTAL)*100) + '%';
+}
+
+const starLabels = ['','Not what I expected','Getting there','Solid — liked it','Really good','Loved it — submit this'];
+function setStar(v) {
+  document.querySelectorAll('#starRow .star-btn').forEach((b,i) => b.classList.toggle('lit', i < v));
+  document.getElementById('star_val').value = v + '/5 — ' + starLabels[v];
+  document.getElementById('starLabel').textContent = starLabels[v] || '';
+}
+
+function pickTexture(el, val) {
+  document.querySelectorAll('#textureGrid .texture-card').forEach(c => c.classList.remove('sel'));
+  el.classList.add('sel');
+  document.getElementById('texture_val').value = val;
+}
+
+function togglePill(el, group, cls) {
+  const active = SEL.some(c => el.classList.contains(c));
+  if (active) { el.classList.remove(...SEL); }
+  else { el.classList.add(cls); }
+  updatePillVal(group);
+}
+
+function selectOne(el, group, cls) {
+  const parent = el.parentElement;
+  parent.querySelectorAll('.pill').forEach(p => p.classList.remove(...SEL));
+  el.classList.add(cls);
+  updatePillVal(group);
+}
+
+const groupMap = {
+  compare: { id: 'compare-pills',  val: 'compare_val' },
+  flavor:  { id: 'flavor-pills',   val: 'flavor_val'  },
+  heat:    { id: 'heat-pills',     val: 'heat_val'    },
+  use:     { id: 'use-pills',      val: 'use_val'     },
+  buy:     { id: 'buy-pills',      val: 'buy_val'     },
+};
+
+function updatePillVal(group) {
+  const { id, val } = groupMap[group];
+  const selected = [];
+  document.querySelectorAll('#' + id + ' .pill').forEach(p => {
+    if (SEL.some(c => p.classList.contains(c))) selected.push(p.textContent.trim());
+  });
+  document.getElementById(val).value = selected.join(', ');
+}
+
+function submitForm() {
+  const email = document.getElementById('emailInput').value.trim();
+  const name  = document.getElementById('nameInput').value.trim();
+  const err   = document.getElementById('emailErr');
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    err.style.display = 'block'; return;
+  }
+  err.style.display = 'none';
+  document.getElementById('feedback_val').value = document.getElementById('openFeedback').value;
+
+  const form = document.getElementById('tastingForm');
+  const data = new FormData(form);
+
+  fetch(form.action, { method:'POST', body:data, headers:{'Accept':'application/json'} })
+    .then(() => {
+      form.style.display = 'none';
+      document.getElementById('tyName').textContent = name
+        ? 'Thank you, ' + name + ' — this genuinely helps.'
+        : 'Thank you — this genuinely helps.';
+      document.getElementById('thankYou').style.display = 'block';
+      document.getElementById('progFill').style.width = '100%';
+      window.scrollTo(0,0);
+    })
+    .catch(() => form.submit());
+}
+</script>
+</body>
+</html>
